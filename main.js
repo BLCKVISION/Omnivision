@@ -12,27 +12,6 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
-  // ── INIT LENIS SMOOTH SCROLL ──
-  const lenis = new Lenis({
-    duration: 1.2,
-    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // https://www.desmos.com/calculator/brs54l4xou
-    direction: 'vertical',
-    gestureDirection: 'vertical',
-    smooth: true,
-    mouseMultiplier: 1,
-    smoothTouch: false,
-    touchMultiplier: 2,
-    infinite: false,
-  });
-
-  function raf(time) {
-    lenis.raf(time);
-    ScrollTrigger.update();
-    requestAnimationFrame(raf);
-  }
-
-  requestAnimationFrame(raf);
-
   gsap.registerPlugin(ScrollTrigger);
 
   /* ── Prevent scroll during load ────────────────────────── */
@@ -120,6 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
   tl.call(() => {
     loader.style.display = 'none';
     document.body.style.overflow = '';
+    
     runHeroAnimations();
     initAboutAnimations();
     initFeaturesAnimations();
@@ -128,10 +108,9 @@ document.addEventListener('DOMContentLoaded', () => {
     initSlider();
 
     // Fundamental: Refresh ScrollTrigger una vez que el DOM es visible
-    // Esto corrige que las secciones de abajo se animen antes de tiempo
     setTimeout(() => {
       ScrollTrigger.refresh();
-    }, 100);
+    }, 150);
   });
 
   /* ═══════════════════════════════════════════════════════
@@ -215,6 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
           backdropFilter: 'blur(20px)',
           background: 'rgba(0,0,0,0.65)',
           borderBottom: '1px solid rgba(255,255,255,0.06)',
+          transform: 'translateZ(0)',
           duration: 0.4
         });
       },
@@ -224,6 +204,7 @@ document.addEventListener('DOMContentLoaded', () => {
           backdropFilter: 'blur(0px)',
           background: 'transparent',
           borderBottom: '1px solid transparent',
+          transform: 'none',
           duration: 0.4
         });
       }
