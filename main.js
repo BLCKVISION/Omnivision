@@ -102,11 +102,11 @@ document.addEventListener('DOMContentLoaded', () => {
     
     runHeroAnimations();
     initAboutAnimations();
+    initSequenceAnimation();
     initFeaturesAnimations();
-    initNavScroll();
     initOmniboxAnimations();
     initStepSlider();
-    initSequenceAnimation();
+    initNavScroll();
 
     // Fundamental: Refresh ScrollTrigger una vez que el DOM es visible
     setTimeout(() => {
@@ -335,7 +335,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: card,
-          start: 'top 65%',
+          start: 'top 50%',
           toggleActions: 'play none none none'
         }
       });
@@ -356,7 +356,7 @@ document.addEventListener('DOMContentLoaded', () => {
     gsap.to('#omnibox .line-inner', {
       scrollTrigger: {
         trigger: '#omnibox',
-        start: 'top 55%',
+        start: 'top 50%',
         toggleActions: 'play none none none'
       },
       y: 0,
@@ -439,7 +439,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const tlSlider = gsap.timeline({
       scrollTrigger: {
         trigger: '#slider-interactivo',
-        start: 'top 55%',
+        start: 'top 50%',
         toggleActions: 'play none none none'
       }
     });
