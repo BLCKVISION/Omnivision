@@ -335,7 +335,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: card,
-          start: 'top 85%',
+          start: 'top 65%',
           toggleActions: 'play none none none'
         }
       });
@@ -356,7 +356,7 @@ document.addEventListener('DOMContentLoaded', () => {
     gsap.to('#omnibox .line-inner', {
       scrollTrigger: {
         trigger: '#omnibox',
-        start: 'top 75%',
+        start: 'top 55%',
         toggleActions: 'play none none none'
       },
       y: 0,
@@ -439,7 +439,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const tlSlider = gsap.timeline({
       scrollTrigger: {
         trigger: '#slider-interactivo',
-        start: 'top 80%',
+        start: 'top 55%',
         toggleActions: 'play none none none'
       }
     });
