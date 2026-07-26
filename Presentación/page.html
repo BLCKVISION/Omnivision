@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>OmniVision — Presentación</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;cursor:none!important;}
+:root{
+  --bg:#08090a;--panel:#0f1011;
+  --txt1:#f7f8f8;--txt2:#d0d6e0;--txt3:#8a8f98;--txt4:#62666d;
+  --accent:#5e6ad2;--accent2:#7170ff;--accent-light:#a5a8ff;
+  --border:rgba(255,255,255,0.08);--border-s:rgba(255,255,255,0.05);
+  --green:#10b981;--red:#ef4444;
+}
+@font-face{font-family:'MR';src:url('fonts/MR.otf') format('opentype');}
+@font-face{font-family:'ML';src:url('fonts/ML.otf') format('opentype');}
+@font-face{font-family:'MB';src:url('fonts/MB.otf') format('opentype');}
+
+html{font-size:16px;}
+body{background:var(--bg);color:var(--txt1);font-family:"Inter",system-ui,sans-serif;
+  font-feature-settings:"cv01","ss03";font-optical-sizing:auto;
+  overflow:hidden;height:100vh;-webkit-font-smoothing:antialiased;}
+
+/* ─── CURSOR ─── */
+.cursor{position:fixed;pointer-events:none;z-index:99999;}
+#cursor-dot{width:8px;height:8px;background:#fff;border-radius:50%;transform:translate(-50%,-50%);}
+#cursor-ring{width:32px;height:32px;border:1px solid rgba(255,255,255,.4);border-radius:50%;transform:translate(-50%,-50%);}
+
+/* ─── INTRO ─── */
+#intro{position:fixed;inset:0;z-index:9999;background:var(--bg);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;}
+#intro::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(rgba(255,255,255,.014) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.014) 1px,transparent 1px);
+  background-size:40px 40px;
+  mask-image:radial-gradient(ellipse 70% 70% at 50% 50%,black 20%,transparent 100%);}
+.intro-logo{position:relative;z-index:2;opacity:0;}
+.intro-logo img{height:88px;object-fit:contain;filter:drop-shadow(0 0 40px rgba(255,255,255,.15));}
+#click-prompt{position:absolute;bottom:48px;left:50%;transform:translateX(-50%);
+  z-index:2;display:flex;flex-direction:column;align-items:center;gap:10px;opacity:0;}
+#click-prompt span{font-size:10px;font-weight:500;letter-spacing:.36em;text-transform:uppercase;color:var(--txt4);}
+#click-prompt svg{color:var(--txt4);animation:bounce 2.2s ease-in-out infinite;}
+
+/* ─── LOADER ─── */
+#loader{position:fixed;inset:0;z-index:9998;background:var(--bg);
+  display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;pointer-events:none;}
+.loader-track{width:min(400px,72vw);height:1px;background:var(--border-s);}
+.loader-fill{width:0%;height:100%;background:rgba(255,255,255,.45);}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
+
+/* ─── DECK ─── */
+#deck{position:fixed;inset:0;overflow:hidden;opacity:0;visibility:hidden;}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;
+  background:var(--bg);overflow:hidden;will-change:transform;}
+.slide::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(rgba(255,255,255,.014) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.014) 1px,transparent 1px);
+  background-size:40px 40px;
+  mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 20%,transparent 100%);}
+
+/* ─── EYEBROW — centrado arriba ─── */
+.slide-eyebrow{
+  position:absolute;top:0;left:0;right:0;z-index:3;
+  padding:36px clamp(28px,7vw,112px) 0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:600;letter-spacing:.38em;
+  text-transform:uppercase;color:var(--txt4);
+}
+
+/* ─── INNER — centrado vertical ─── */
+.inner{
+  flex:1;width:100%;max-width:1240px;margin:0 auto;
+  display:flex;flex-direction:column;gap:28px;
+  position:relative;z-index:2;
+  padding:0 clamp(28px,7vw,112px);
+  justify-content:center;
+}
+
+/* ─── TYPE ─── */
+h2{font-size:clamp(30px,5vw,60px);font-weight:500;line-height:1.04;
+  letter-spacing:-1.2px;color:var(--txt1);padding-bottom:8px;}
+h3{font-size:15px;font-weight:600;letter-spacing:-.1px;color:var(--txt1);}
+.lead{font-size:17px;font-weight:400;line-height:1.65;letter-spacing:-.13px;
+  color:var(--txt3);max-width:700px;}
+.body{font-size:14px;font-weight:400;line-height:1.65;color:var(--txt3);}
+.dim{color:var(--txt4);}
+.divider{width:40px;height:1px;background:var(--border);}
+.a-line{background:linear-gradient(180deg,var(--accent2) 0%,var(--accent-light) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-style:normal;}
+
+/* ─── HUD ─── */
+#dots{position:fixed;bottom:32px;left:50%;transform:translateX(-50%);
+  z-index:200;display:flex;gap:8px;align-items:center;opacity:0;}
+.dot{width:5px;height:5px;border-radius:999px;background:rgba(255,255,255,.2);
+  transition:background .35s,width .35s;cursor:none;}
+.dot.active{background:var(--txt1);width:20px;}
+#counter{position:fixed;top:28px;right:36px;z-index:200;
+  font-size:11px;font-weight:500;letter-spacing:.18em;color:var(--txt4);opacity:0;}
+#counter b{color:var(--txt2);}
+#hint{position:fixed;bottom:76px;left:50%;transform:translateX(-50%);
+  z-index:200;font-size:10px;font-weight:500;letter-spacing:.32em;text-transform:uppercase;
+  color:var(--txt4);display:flex;align-items:center;gap:8px;opacity:0;}
+#hint svg{animation:bounce 2.4s ease-in-out infinite;}
+.slide-logo{height:44px;object-fit:contain;filter:drop-shadow(0 0 20px rgba(255,255,255,.1));}
+
+/* ─── GRIDS ─── */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+
+/* ─── CARDS ─── */
+.card{
+  background:rgba(255,255,255,0.02);border:1px solid var(--border);
+  border-radius:12px;padding:24px;position:relative;overflow:hidden;
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  transition:background .25s,border-color .25s,transform .25s,box-shadow .25s;
+}
+.card:hover{background:rgba(255,255,255,0.05);border-color:rgba(255,255,255,.18);
+  transform:translateY(-2px);box-shadow:0 20px 40px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.06);}
+.card .deco-num{
+  position:absolute;bottom:-8px;right:10px;
+  font-size:60px;font-weight:700;line-height:1;
+  color:rgba(255,255,255,0.025);pointer-events:none;user-select:none;letter-spacing:-3px;
+}
+.card h3{margin-bottom:10px;}
+.card p{font-size:14px;font-weight:400;line-height:1.7;letter-spacing:-.1px;color:var(--txt3);}
+
+/* ─── PILL BADGE — left stripe ─── */
+.pill-badge{
+  display:inline-block;
+  padding:5px 12px;
+  border-radius:0 4px 4px 0;
+  font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+  margin-bottom:16px;
+  border:none;
+  border-left:0.5px solid rgba(255,255,255,0.35);
+  transition:opacity .2s ease;
+}
+.pill-badge:hover{opacity:.85;}
+.pill-red{
+  background:rgba(239,68,68,0.75);
+  color:#fff;
+}
+.pill-green{
+  background:rgba(16,185,129,0.75);
+  color:#fff;
+}
+
+/* ─── ARCH COLUMNS ─── */
+.arch-col{background:rgba(255,255,255,0.015);border:1px solid var(--border);
+  border-radius:12px;padding:28px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  transition:all .3s ease;}
+.arch-col:hover{background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,.14);transform:translateY(-2px);}
+.arch-col .arch-tag{font-size:10px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;
+  color:var(--accent2);margin-bottom:6px;}
+.arch-col .arch-title{font-size:20px;font-weight:600;letter-spacing:-.3px;color:var(--txt1);margin-bottom:18px;}
+.arch-col ul{list-style:none;display:flex;flex-direction:column;gap:8px;}
+.arch-col li{font-size:14px;font-weight:400;line-height:1.6;color:var(--txt3);padding-left:14px;position:relative;}
+.arch-col li::before{content:"•";position:absolute;left:0;color:var(--txt4);}
+
+/* ─── PIRÁMIDE (fiel a Piramide.html) ─── */
+.pyramid-wrapper{
+  filter:drop-shadow(0 0 50px rgba(255,255,255,0.06));
+  width:100%;
+}
+.pyramid-container{
+  width:min(76vw,620px);
+  height:min(52vw,420px);
+  clip-path:polygon(50% 0%,100% 100%,0% 100%);
+  background:rgba(255,255,255,0.025);
+  backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);
+  display:flex;flex-direction:column;
+  margin:0 auto;position:relative;
+}
+.pyramid-container::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(255,255,255,0.07) 0%,rgba(255,255,255,0.01) 50%,rgba(255,255,255,0.04) 100%);
+  pointer-events:none;
+}
+.pyr-level{
+  display:flex;align-items:center;justify-content:center;text-align:center;
+  border-bottom:1px solid rgba(255,255,255,0.07);
+  position:relative;cursor:none;overflow:hidden;
+  transition:background .6s ease;
+}
+.pyr-level:last-child{border-bottom:none;}
+.pyr-level-1{flex:0 0 38%;}
+.pyr-level-2{flex:0 0 31%;}
+.pyr-level-3{flex:0 0 31%;}
+.pyr-level::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(255,255,255,0.07) 0%,rgba(255,255,255,0.02) 60%,transparent 100%);
+  opacity:0;transform:translateY(10px);
+  transition:opacity .7s ease,transform .7s ease;pointer-events:none;
+}
+.pyr-level:hover::after{opacity:1;transform:translateY(0);}
+.pyr-level::before{
+  content:'';position:absolute;top:0;left:20%;right:20%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.25),transparent);
+  opacity:0;transform:scaleX(0);
+  transition:opacity .6s ease,transform .6s cubic-bezier(.4,0,.2,1);pointer-events:none;
+}
+.pyr-level:hover::before{opacity:1;transform:scaleX(1);}
+.pyr-content{
+  display:flex;flex-direction:column;align-items:center;z-index:1;
+  transition:transform .7s cubic-bezier(.34,1.3,.64,1),filter .6s ease;
+}
+.pyr-level-1 .pyr-content{max-width:200px;margin-top:42px;}
+.pyr-level-2 .pyr-content{max-width:380px;}
+.pyr-level-3 .pyr-content{max-width:560px;padding-bottom:14px;}
+.pyr-level:hover .pyr-content{transform:translateY(-5px) scale(1.04);filter:drop-shadow(0 6px 20px rgba(255,255,255,0.08));}
+.pyr-line{display:none;}
+.pt-name{font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:5px;color:rgba(255,255,255,0.35);margin-bottom:8px;transition:color .6s ease,letter-spacing .6s ease;}
+.pyr-level:hover .pt-name{color:rgba(255,255,255,0.8);letter-spacing:6px;}
+.pt-cat{font-weight:400;line-height:1.4;color:#e0e0e0;margin-bottom:8px;transition:color .5s ease;}
+.pyr-level-1 .pt-cat{font-size:0.72rem;letter-spacing:.06em;}
+.pyr-level-2 .pt-cat{font-size:1rem;}
+.pyr-level-3 .pt-cat{font-size:0.95rem;}
+.pyr-level:hover .pt-cat{color:#fff;}
+.pt-info{font-size:0.78rem;font-weight:300;color:#444;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;transition:color .6s ease;}
+.pyr-level-1 .pt-info{font-size:0.72rem;}
+.pyr-level:hover .pt-info{color:#777;}
+.pyr-sep{color:#2e2e2e;user-select:none;}
+.pyr-badge{position:absolute;right:calc(50% - 170px);top:50%;transform:translateY(-50%);font-size:0.55rem;font-weight:700;letter-spacing:3px;color:rgba(255,255,255,0.05);text-transform:uppercase;writing-mode:vertical-rl;user-select:none;transition:color .6s ease;}
+.pyr-level-1 .pyr-badge{right:calc(50% - 120px);top:68%;}
+.pyr-level:hover .pyr-badge{color:rgba(255,255,255,0.18);}
+.pyr-rays{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+.pyr-ray{position:absolute;bottom:-10%;width:1px;background:linear-gradient(to top,rgba(255,255,255,0.1),transparent);transform-origin:bottom center;animation:ray-glow 8s ease-in-out infinite;}
+.pyr-ray:nth-child(1){left:48%;height:70%;animation-delay:0s;animation-duration:9s;}
+.pyr-ray:nth-child(2){left:44%;height:55%;animation-delay:1s;animation-duration:11s;transform:rotate(-6deg);}
+.pyr-ray:nth-child(3){left:52%;height:55%;animation-delay:1.5s;animation-duration:10s;transform:rotate(6deg);}
+.pyr-ray:nth-child(4){left:40%;height:40%;animation-delay:2.5s;animation-duration:13s;transform:rotate(-14deg);}
+.pyr-ray:nth-child(5){left:57%;height:40%;animation-delay:2s;animation-duration:12s;transform:rotate(14deg);}
+.pyr-ray:nth-child(6){left:35%;height:28%;animation-delay:3.5s;animation-duration:14s;transform:rotate(-24deg);}
+.pyr-ray:nth-child(7){left:63%;height:28%;animation-delay:3s;animation-duration:13s;transform:rotate(24deg);}
+@keyframes ray-glow{0%,100%{opacity:0;}40%,60%{opacity:1;}}
+.pyr-glow-bg{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse 50% 35% at 50% 70%,rgba(255,255,255,0.05) 0%,transparent 70%);animation:glow-pulse 8s ease-in-out infinite;pointer-events:none;}
+@keyframes glow-pulse{0%,100%{opacity:0.6;}50%{opacity:1;}}
+
+/* ─── SCOPE ─── */
+.scope-row{display:flex;flex-direction:column;gap:12px;}
+.scope-item{display:grid;grid-template-columns:48px 1fr;gap:20px;align-items:center;
+  padding:20px 24px;border:1px solid var(--border);border-radius:12px;
+  background:rgba(255,255,255,0.015);backdrop-filter:blur(8px);transition:all .3s ease;}
+.scope-item:hover{background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,.14);transform:translateX(6px);}
+.scope-icon{width:48px;height:48px;border-radius:10px;background:rgba(255,255,255,0.04);
+  border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--accent2);}
+.scope-item h3{margin-bottom:4px;font-size:14px;}
+.scope-item p{font-size:13px;font-weight:400;line-height:1.6;color:var(--txt3);}
+
+/* ─── LIMIT GRID ─── */
+.limit-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.limit-card{padding:28px;border:1px solid var(--border);border-radius:12px;
+  background:rgba(255,255,255,0.015);backdrop-filter:blur(10px);
+  position:relative;overflow:hidden;transition:all .3s ease;}
+.limit-card:hover{background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,.14);transform:translateY(-2px);}
+.limit-card .lc-num{position:absolute;bottom:-12px;right:8px;
+  font-size:88px;font-weight:700;color:rgba(255,255,255,0.04);line-height:1;pointer-events:none;letter-spacing:-4px;}
+.limit-card .lc-tag{font-size:10px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;
+  color:var(--red);margin-bottom:10px;}
+.limit-card h3{font-size:15px;font-weight:600;color:var(--txt1);margin-bottom:8px;}
+.limit-card p{font-size:14px;font-weight:400;line-height:1.65;color:var(--txt3);}
+
+/* ─── METHODOLOGY ─── */
+.meth-col{background:rgba(255,255,255,0.015);border:1px solid var(--border);
+  border-radius:12px;padding:28px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  transition:all .3s ease;}
+.meth-col:hover{background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,.14);transform:translateY(-2px);}
+.meth-tag{font-size:10px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:var(--accent2);margin-bottom:4px;}
+.meth-title{font-size:20px;font-weight:600;letter-spacing:-.3px;color:var(--txt1);margin-bottom:12px;}
+.meth-col p{font-size:14px;font-weight:400;line-height:1.7;color:var(--txt3);margin-bottom:16px;}
+.meth-col ul{list-style:none;display:flex;flex-direction:column;gap:6px;}
+.meth-col li{font-size:13px;font-weight:400;line-height:1.6;color:var(--txt3);padding-left:14px;position:relative;}
+.meth-col li::before{content:"•";position:absolute;left:0;color:var(--accent2);}
+
+/* ─── EDT ─── */
+.edt-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+.edt-card{padding:24px;border:1px solid var(--border);border-radius:10px;
+  background:rgba(255,255,255,0.015);backdrop-filter:blur(8px);
+  position:relative;overflow:hidden;transition:all .3s ease;}
+.edt-card:hover{background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,.16);transform:translateY(-2px);}
+.edt-card .edt-deco{position:absolute;bottom:-10px;right:6px;font-size:80px;font-weight:700;
+  color:rgba(255,255,255,0.04);line-height:1;pointer-events:none;letter-spacing:-3px;}
+.edt-card .edt-num{font-size:12px;font-weight:500;color:var(--txt4);margin-bottom:10px;letter-spacing:.06em;}
+.edt-card .edt-title{font-size:14px;font-weight:700;letter-spacing:.02em;text-transform:uppercase;
+  color:var(--txt1);margin-bottom:8px;}
+.edt-card .edt-desc{font-size:13px;font-weight:400;line-height:1.6;color:var(--txt3);}
+
+/* ─── GANTT — barras glass ─── */
+.gantt-wrap{width:100%;}
+.gantt-header{display:grid;grid-template-columns:180px repeat(8,1fr);margin-bottom:2px;}
+.gantt-header span{font-size:11px;font-weight:500;letter-spacing:.1em;color:var(--txt4);
+  text-align:center;padding:6px 0;}
+.gantt-header .gh-hi{color:var(--txt1);font-weight:700;}
+.gantt-row{display:grid;grid-template-columns:180px repeat(8,1fr);align-items:center;
+  border-top:1px solid var(--border-s);height:38px;}
+.gantt-row:last-child{border-bottom:1px solid var(--border-s);}
+.gantt-label{font-size:11px;font-weight:600;letter-spacing:.08em;color:var(--txt3);
+  text-transform:uppercase;padding-right:10px;}
+.gantt-cell{height:26px;padding:0 2px;display:flex;align-items:center;}
+.gantt-bar{
+  flex:1;height:100%;border-radius:3px;
+  background:rgba(255,255,255,0.14);
+  border:1px solid rgba(255,255,255,0.15);
+  backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+  transform-origin:left center;transform:scaleX(0);
+}
+.gantt-bar.bar-red{
+  background:rgba(239,68,68,0.25);
+  border:1px solid rgba(239,68,68,0.4);
+  box-shadow:0 0 12px rgba(239,68,68,0.2);
+}
+.gantt-note{margin-top:16px;padding:14px 20px;border-left:2px solid var(--red);
+  background:rgba(239,68,68,0.05);border-radius:0 8px 8px 0;
+  font-size:13px;font-weight:400;line-height:1.6;color:var(--txt3);}
+.gantt-note strong{color:var(--txt1);font-weight:600;}
+.gantt-note .note-red{color:var(--red);font-weight:700;}
+
+/* ─── MVP SLIDE ─── */
+.mvp-row{display:flex;flex-direction:column;gap:24px;}
+.mvp-heading{font-size:clamp(18px,2.5vw,28px);font-weight:600;letter-spacing:-.3px;color:var(--txt2);}
+.mvp-chips{display:flex;flex-wrap:wrap;gap:8px;}
+.mvp-chip{padding:8px 16px;border-radius:8px;border:1px solid var(--border);
+  background:rgba(255,255,255,0.02);font-size:13px;font-weight:500;color:var(--txt3);}
+
+/* ─── CLOSING ─── */
+.center-slide{display:flex;flex-direction:column;align-items:center;text-align:center;gap:24px;}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;}
+.chip{padding:5px 12px;border-radius:999px;border:1px solid var(--border);
+  background:transparent;font-size:12px;font-weight:500;color:var(--txt3);}
+
+.panel{background:rgba(255,255,255,0.015);border:1px solid var(--border);
+  border-radius:12px;padding:24px;backdrop-filter:blur(8px);}
+.panel h3{margin-bottom:14px;}
+.blist{list-style:none;display:flex;flex-direction:column;gap:7px;}
+.blist li{padding:10px 12px;background:rgba(255,255,255,0.02);border:1px solid var(--border-s);
+  border-radius:6px;font-size:14px;font-weight:400;line-height:1.55;letter-spacing:-.1px;color:var(--txt3);}
+
+.bgw{position:absolute;bottom:-.05em;right:-.04em;font-size:clamp(90px,17vw,240px);
+  font-weight:500;letter-spacing:-.08em;color:rgba(255,255,255,0.018);
+  line-height:1;user-select:none;pointer-events:none;z-index:1;}
+
+@media(max-width:1000px){
+  .g4,.g3,.edt-grid{grid-template-columns:1fr 1fr;}
+  .g2,.limit-grid{grid-template-columns:1fr;}
+  .pyr-block:nth-child(1){clip-path:polygon(18% 0%,82% 0%,100% 100%,0% 100%);padding:28px 60px;}
+}
+@media(max-width:600px){
+  h2{font-size:26px;}
+  .g4,.g3,.g2,.edt-grid,.limit-grid{grid-template-columns:1fr;}
+  .gantt-header,.gantt-row{grid-template-columns:100px repeat(8,1fr);}
+}
+</style>
+</head>
+<body>
+
+<!-- INTRO -->
+<div id="intro">
+  <div class="intro-logo"><img src="logos/Logotipo 3.png" alt="OmniVision"></div>
+  <div id="click-prompt">
+    <span>Click para continuar</span>
+    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+  </div>
+</div>
+
+<!-- LOADER -->
+<div id="loader"><div class="loader-track"><div class="loader-fill"></div></div></div>
+
+<!-- DECK -->
+<div id="deck">
+
+  <!-- 0 · PORTADA -->
+  <div class="slide" data-i="0">
+    <div class="inner">
+      <div class="e eyebrow-inline" style="font-size:13px;font-weight:600;letter-spacing:.38em;text-transform:uppercase;color:var(--txt4);display:inline-flex;align-items:center;gap:14px;margin-bottom:-8px;">
+        <span style="width:20px;height:2px;background:var(--txt4);display:inline-block;flex-shrink:0;"></span>
+        UNC &mdash; Ingeniería en Inteligencia Artificial
+      </div>
+      <img class="e" src="logos/Logotipo_1.png" alt="OMNIVISION" style="height:65px;object-fit:contain;object-position:left center;margin-top:8px;">
+      <p class="e" style="font-family:ML,sans-serif;font-size:16px;font-weight:400;line-height:1.5;letter-spacing:-.2px;color:var(--txt2);max-width:800px;">
+        Sistema de Monitoreo Inteligente en Tiempo Real basado en<br>Edge Computing y Visión Artificial.
+      </p>
+      <div class="e" style="width:100%;height:1px;background:var(--border);"></div>
+      <div class="e" style="display:flex;align-items:flex-end;justify-content:space-between;">
+        <div>
+          <div style="font-size:10px;font-weight:600;letter-spacing:.28em;text-transform:uppercase;color:var(--txt4);margin-bottom:12px;">Desarrolladores</div>
+          <div style="font-family:'MR',sans-serif;font-size:16px;font-weight:500;letter-spacing:-.2px;color:var(--txt1);">Albert Fonseca &amp; Emanuel Jiménez</div>
+        </div>
+        <div>
+          <div style="font-size:10px;font-weight:600;letter-spacing:.28em;text-transform:uppercase;color:var(--txt4);margin-bottom:12px;">Tutoría</div>
+          <div style="font-family:'MR',sans-serif;font-size:16px;font-weight:500;letter-spacing:-.2px;color:var(--txt1);">Ing. Deyanira Jiménez</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1 · DESCRIPCIÓN Y PROPÓSITO -->
+  <div class="slide" data-i="1">
+    <div class="bgw">WHY</div>
+    <div class="slide-eyebrow e">01&ensp;&ensp;D E S C R I P C I Ó N&ensp;&ensp;Y&ensp;&ensp;P R O P Ó S I T O</div>
+    <div class="inner" style="padding-top:96px;">
+      <h2 class="e">El Porqué de la <span class="a-line">Solución</span></h2>
+      <div class="g2">
+        <div class="card e">
+          <div class="deco-num">01</div>
+          <div class="pill-badge-red pill-red">Problema</div>
+          <p>Vulnerabilidad en entornos comerciales e institucionales por falta de supervisión proactiva. Los sistemas actuales son reactivos (grabación), no preventivos (entendimiento).</p>
+        </div>
+        <div class="card e">
+          <div class="deco-num">02</div>
+          <div class="pill-badge-green pill-green">Valor Esperado</div>
+          <p>Soberanía tecnológica y seguridad preventiva. Respuesta inmediata local mediante procesamiento en el borde (Edge Computing) sin dependencia de nubes costosas.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2 · OBJETIVO GENERAL -->
+  <div class="slide" data-i="2">
+    <div class="bgw">OBJ</div>
+    <div class="slide-eyebrow e">02&ensp;&ensp;O B J E T I V O&ensp;&ensp;G E N E R A L</div>
+    <div class="inner" style="padding-top:96px;">
+      <h2 class="e">Implementar un sistema de<br>videovigilancia <span class="a-line">inteligente</span></h2>
+      <p class="lead e">Detectar comportamientos de riesgo y emitir alertas tempranas automáticas en entornos comerciales, institucionales y espacios públicos.</p>
+      <div class="g3">
+        <div class="card e"><div class="deco-num">01</div><h3>Preventivo</h3><p>Analiza conducta en tiempo real, no solo graba. Identifica señales de riesgo antes de escalar.</p></div>
+        <div class="card e"><div class="deco-num">02</div><h3>Autónomo</h3><p>Procesamiento local en el borde sin depender de la nube. Respuesta inmediata con latencia mínima.</p></div>
+        <div class="card e"><div class="deco-num">03</div><h3>Escalable</h3><p>De un comercio pequeño a múltiples ubicaciones con arquitectura modular.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 · OBJETIVOS ESPECÍFICOS -->
+  <div class="slide" data-i="3">
+    <div class="bgw">SPEC</div>
+    <div class="slide-eyebrow e">03&ensp;&ensp;O B J E T I V O S&ensp;&ensp;E S P E C Í F I C O S</div>
+    <div class="inner" style="padding-top:96px;">
+      <h2 class="e">Los pilares técnicos<br>del <span class="a-line">sistema</span></h2>
+      <div class="g3">
+        <div class="card e"><div class="deco-num">01</div><h3>Motor Visual</h3><p>Desarrollar motor visual con YOLOv8 y tracking de trayectorias para detección en tiempo real.</p></div>
+        <div class="card e"><div class="deco-num">02</div><h3>Arquitectura Edge</h3><p>Configurar arquitectura Edge Computing con FastAPI para inferencia local y procesamiento paralelo.</p></div>
+        <div class="card e"><div class="deco-num">03</div><h3>Plataforma Central</h3><p>Construir plataforma en NestJS para orquestar usuarios, reglas, alertas y notificaciones.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4 · ARQUITECTURA -->
+  <div class="slide" data-i="4">
+    <div class="bgw">ARCH</div>
+    <div class="slide-eyebrow e">04&ensp;&ensp;A R Q U I T E C T U R A&ensp;&ensp;D E&ensp;&ensp;A L T O&ensp;&ensp;R E N D I M I E N T O</div>
+    <div class="inner" style="padding-top:96px;">
+      <h2 class="e">Ecosistema optimizado<br>para <span class="a-line">IA en tiempo real</span></h2>
+      <div class="g3">
+        <div class="arch-col e">
+          <div class="arch-tag">IA</div><div class="arch-title">Core Engine</div>
+          <ul><li>YOLOv8 (Detección)</li><li>Yolo-movement (Tracking)</li><li>OpenCV (Pre-procesamiento)</li></ul>
+        </div>
+        <div class="arch-col e">
+          <div class="arch-tag">EDGE</div><div class="arch-title">Inferencia Local</div>
+          <ul><li>Python / FastAPI</li><li>Procesamiento Paralelo</li><li>Omni-Box (Linux OS)</li></ul>
+        </div>
+        <div class="arch-col e">
+          <div class="arch-tag">BACK</div><div class="arch-title">Orquestación</div>
+          <ul><li>NestJS (Microservicios)</li><li>WebSockets (Alertas)</li><li>PostgreSQL / Firebase</li></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5 · MARCO LEGAL — PIRÁMIDE -->
+  <div class="slide" data-i="5">
+    <div class="bgw">LEX</div>
+    <div class="slide-eyebrow e">05&ensp;&ensp;M A R C O&ensp;&ensp;L E G A L</div>
+    <div class="inner" style="padding-top:96px;align-items:center;">
+      <h2 class="e" style="text-align:center;">Pirámide de <span class="a-line">Kelsen</span></h2>
+      <div class="pyramid-wrapper e">
+        <div class="pyr-rays">
+          <div class="pyr-ray"></div><div class="pyr-ray"></div>
+          <div class="pyr-ray"></div><div class="pyr-ray"></div>
+          <div class="pyr-ray"></div><div class="pyr-ray"></div>
+          <div class="pyr-ray"></div>
+        </div>
+        <div class="pyr-glow-bg"></div>
+        <div class="pyramid-container">
+          <div class="pyr-level pyr-level-1">
+            <div class="pyr-content">
+              <div class="pyr-line"></div>
+              <div class="pt-name">Fundamental</div>
+              <div class="pt-cat">CRBV</div>
+              <div class="pt-info">
+                Art. 20 <span class="pyr-sep">/</span>
+                Art. 48 <span class="pyr-sep">/</span>
+                Art. 60
+              </div>
+            </div>
+            <span class="pyr-badge">I</span>
+          </div>
+          <div class="pyr-level pyr-level-2">
+            <div class="pyr-content">
+              <div class="pyr-line"></div>
+              <div class="pt-name">Legal</div>
+              <div class="pt-cat">Leyes Orgánicas y Especiales</div>
+              <div class="pt-info">
+                Ley Infogobierno <span class="pyr-sep">/</span>
+                Ley Especial contra Delitos Informáticos
+              </div>
+            </div>
+            <span class="pyr-badge">II</span>
+          </div>
+          <div class="pyr-level pyr-level-3">
+            <div class="pyr-content">
+              <div class="pyr-line"></div>
+              <div class="pt-name">Sub-Legal</div>
+              <div class="pt-cat">Reglamentos, Decretos y Normas Técnicas</div>
+              <div class="pt-info">
+                Decreto 3.390 (Software Libre) <span class="pyr-sep">/</span>
+                Normas SUSCERTE
+              </div>
+            </div>
+            <span class="pyr-badge">III</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6 · ALCANCES -->
+  <div class="slide" data-i="6">
+    <div class="bgw">SCOPE</div>
+    <div class="slide-eyebrow e">05&ensp;&ensp;A L C A N C E S&ensp;&ensp;D E L&ensp;&ensp;P R O Y E C T O</div>
+    <div class="inner" style="padding-top:96px;">
+      <h2 class="e">Límites de <span class="a-line">Ejecución</span></h2>
+      <div class="scope-row">
+        <div class="scope-item e">
+          <div class="scope-icon"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+          <div><h3>Infraestructura</h3><p>Diseño y ensamble de unidades de procesamiento local (Raspberry Pi). Integración con cámaras IP existentes mediante protocolos RTSP.</p></div>
+        </div>
+        <div class="scope-item e">
+          <div class="scope-icon"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+          <div><h3>Técnico</h3><p>Despliegue de la Omni-Box: procesamiento paralelo de frames con YOLOv8 y sincronización segura con Backend centralizado.</p></div>
+        </div>
+        <div class="scope-item e">
+          <div class="scope-icon"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg></div>
+          <div><h3>Servicio</h3><p>Modelo IaaS (Infraestructura como Servicio). Personalización de algoritmos de tracking según la disposición física del local.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7 · LIMITACIONES -->
+  <div class="slide" data-i="7">
+    <div class="bgw">LIMIT</div>
+    <div class="slide-eyebrow e">06&ensp;&ensp;L I M I T A C I O N E S</div>
+    <div class="inner" style="padding-top:96px;">
+      <h2 class="e">Restricciones Técnicas<br>y <span class="a-line">Éticas</span></h2>
+      <div class="limit-grid">
+        <div class="limit-card e"><div class="lc-num">01</div><div class="lc-tag">Hardware y Entorno</div><h3>Capacidad del dispositivo</h3><p>Sujeto a RAM/CPU del dispositivo de borde. Precisión afectada por oscuridad extrema o niebla densa.</p></div>
+        <div class="limit-card e"><div class="lc-num">02</div><div class="lc-tag">Operatividad</div><h3>Responsabilidad del cliente</h3><p>Requiere suministro eléctrico estable. El sistema detecta y alerta, pero la respuesta física es del cliente.</p></div>
+        <div class="limit-card e"><div class="lc-num">03</div><div class="lc-tag">Privacidad Ética</div><h3>No Biometría</h3><p>Análisis conductual, no reconocimiento facial. Cumple con la protección de identidad civil.</p></div>
+        <div class="limit-card e"><div class="lc-num">04</div><div class="lc-tag">Propiedad Intelectual</div><h3>Titularidad del autor</h3><p>El cliente accede al servicio, pero el código y los modelos de IA son propiedad del autor.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8 · METODOLOGÍA -->
+  <div class="slide" data-i="8">
+    <div class="bgw">METHOD</div>
+    <div class="slide-eyebrow e">07&ensp;&ensp;M E T O D O L O G Í A</div>
+    <div class="inner" style="padding-top:96px;">
+      <h2 class="e">Estrategia <span class="a-line">Híbrida</span></h2>
+      <div class="g2">
+        <div class="meth-col e">
+          <div class="meth-tag">Administración / PMBOK</div>
+          <div class="meth-title">Gestión de Ciclo de Vida</div>
+          <p>Utilizamos la rigurosidad del PMBOK para garantizar que los hitos de hardware, presupuesto y marco legal se cumplan con precisión administrativa.</p>
+          <ul><li>Acta de Constitución</li><li>Gestión de Interesados</li><li>Control de Calidad Operativo</li></ul>
+        </div>
+        <div class="meth-col e">
+          <div class="meth-tag">Desarrollo / SCRUM</div>
+          <div class="meth-title">Iteración de IA</div>
+          <p>Aplicamos metodologías ágiles para el entrenamiento de los modelos de visión artificial y el backend, con ajustes rápidos según los resultados de las pruebas.</p>
+          <ul><li>Sprints de Refactorización</li><li>Integración Continua (CI)</li><li>Feedback de Campo Inmediato</li></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9 · EDT -->
+  <div class="slide" data-i="9">
+    <div class="bgw">EDT</div>
+    <div class="slide-eyebrow e">08&ensp;&ensp;D E S G L O S E&ensp;&ensp;D E&ensp;&ensp;T R A B A J O</div>
+    <div class="inner" style="padding-top:96px;">
+      <h2 class="e">Estructura <span class="a-line">EDT</span></h2>
+      <div class="edt-grid">
+        <div class="edt-card e"><div class="edt-deco">1</div><div class="edt-num">1.0</div><div class="edt-title">Gestión del Proyecto</div><div class="edt-desc">Planificación estratégica y Marco Legal (Kelsen).</div></div>
+        <div class="edt-card e"><div class="edt-deco">2</div><div class="edt-num">2.0</div><div class="edt-title">Omni-Box (Borde)</div><div class="edt-desc">Configuración de S.O. y Servidor de Captura OpenCV.</div></div>
+        <div class="edt-card e"><div class="edt-deco">3</div><div class="edt-num">3.0</div><div class="edt-title">Motor de IA</div><div class="edt-desc">YOLOv8, Tracking y Lógica de Comportamiento.</div></div>
+        <div class="edt-card e"><div class="edt-deco">4</div><div class="edt-num">4.0</div><div class="edt-title">Orquestación Central</div><div class="edt-desc">Backend NestJS y Sistema de Alertas (WebSockets).</div></div>
+        <div class="edt-card e"><div class="edt-deco">5</div><div class="edt-num">5.0</div><div class="edt-title">Interfaz &amp; Streaming</div><div class="edt-desc">Dashboard de Monitoreo y Panel de Configuración.</div></div>
+        <div class="edt-card e"><div class="edt-deco">6</div><div class="edt-num">6.0</div><div class="edt-title">Implementación</div><div class="edt-desc">Pruebas Piloto y Lanzamiento del Servicio.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10 · CRONOGRAMA -->
+  <div class="slide" data-i="10">
+    <div class="bgw">GANTT</div>
+    <div class="slide-eyebrow e" style="justify-content:space-between;">
+      <span style="display:inline-flex;align-items:center;gap:14px;">
+        <span style="width:20px;height:2px;background:var(--txt4);display:inline-block;flex-shrink:0;"></span>
+        09&ensp;&ensp;C R O N O G R A M A
+      </span>
+      <span style="font-size:10px;font-weight:600;letter-spacing:.28em;text-transform:uppercase;color:var(--txt4);margin-right:0;">Ciclo de 8 semanas</span>
+    </div>
+    <div class="inner" style="padding-top:96px;">
+      <h2 class="e">Plan <span class="a-line">Maestro</span></h2>
+      <div class="gantt-wrap e">
+        <div class="gantt-header">
+          <span></span>
+          <span>S1</span><span>S2</span><span>S3</span><span>S4</span><span>S5</span>
+          <span class="gh-hi">S6</span><span>S7</span><span>S8</span>
+        </div>
+        <div class="gantt-row">
+          <div class="gantt-label">Iniciación &amp; Legal</div>
+          <div class="gantt-cell"><div class="gantt-bar"></div></div>
+          <div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div>
+          <div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div>
+        </div>
+        <div class="gantt-row">
+          <div class="gantt-label">Omni-Box Hardware</div>
+          <div class="gantt-cell"><div class="gantt-bar"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar"></div></div>
+          <div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div>
+          <div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div>
+        </div>
+        <div class="gantt-row">
+          <div class="gantt-label">Optimización IA</div>
+          <div class="gantt-cell"></div>
+          <div class="gantt-cell"><div class="gantt-bar"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar"></div></div>
+          <div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div>
+          <div class="gantt-cell"></div><div class="gantt-cell"></div>
+        </div>
+        <div class="gantt-row">
+          <div class="gantt-label">Integración Backend</div>
+          <div class="gantt-cell"></div><div class="gantt-cell"></div>
+          <div class="gantt-cell"><div class="gantt-bar"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar"></div></div>
+          <div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div>
+        </div>
+        <div class="gantt-row">
+          <div class="gantt-label">Frontend &amp; Dashboard</div>
+          <div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div>
+          <div class="gantt-cell"><div class="gantt-bar"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar"></div></div>
+          <div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div>
+        </div>
+        <div class="gantt-row">
+          <div class="gantt-label">Control QA (Falsos +)</div>
+          <div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div>
+          <div class="gantt-cell"></div><div class="gantt-cell"></div>
+          <div class="gantt-cell"><div class="gantt-bar bar-red"></div></div>
+          <div class="gantt-cell"></div><div class="gantt-cell"></div>
+        </div>
+        <div class="gantt-row">
+          <div class="gantt-label">Despliegue &amp; Cierre</div>
+          <div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div>
+          <div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div>
+          <div class="gantt-cell"><div class="gantt-bar"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar"></div></div>
+        </div>
+      </div>
+      <div class="gantt-note e">
+        <strong>Análisis de Riesgo:</strong> La <span class="note-red">Semana 6</span> es la variable determinante. Se destina el 100% de la capacidad operativa a la mitigación de falsos positivos en el entorno real del cliente antes de la entrega final.
+      </div>
+    </div>
+  </div>
+
+  <!-- 11 · MVP -->
+  <div class="slide" data-i="11">
+    <div class="bgw">MVP</div>
+    <div class="slide-eyebrow e">10&ensp;&ensp;M V P&ensp;&ensp;F A S E&ensp;&ensp;D E&ensp;&ensp;D E S P L I E G U E</div>
+    <div class="inner" style="padding-top:96px;">
+      <h2 class="e">MVP: <span class="a-line">Fase de Despliegue</span></h2>
+      <p class="lead e">Muchos proyectos de IA terminan en el papel o en entornos de prueba locales. OmniVision ha superado esa barrera.</p>
+      <div class="g3">
+        <div class="card e">
+          <div class="deco-num">01</div>
+          <h3>Detección Funcional</h3>
+          <p>YOLOv8 ejecutándose en tiempo real sobre un nodo local. Tracking de trayectorias activo por sujeto con ID persistente.</p>
+        </div>
+        <div class="card e">
+          <div class="deco-num">02</div>
+          <h3>API Operativa</h3>
+          <p>FastAPI recibiendo streams, procesando frames en paralelo y emitiendo eventos de alerta vía WebSocket al dashboard.</p>
+        </div>
+        <div class="card e">
+          <div class="deco-num">03</div>
+          <h3>Interfaz en vivo</h3>
+          <p>Panel de monitoreo con visualización de feed en tiempo real, log de alertas y configuración de zonas de detección.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /#deck -->
+
+<div id="dots"></div>
+<div id="hint">Scroll para navegar <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12l7 7 7-7"/></svg></div>
+<div id="counter"><b>01</b> / 12</div>
+
+<div id="cursor-dot" class="cursor"></div>
+<div id="cursor-ring" class="cursor"></div>
+
+<script>
+(function(){
+  /* ─ CURSOR ─ */
+  const dot=document.getElementById('cursor-dot'),ring=document.getElementById('cursor-ring');
+  let mx=-200,my=-200,rx=-200,ry=-200,clicking=false;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+  document.addEventListener('mousedown',()=>{clicking=true;});
+  document.addEventListener('mouseup',()=>{clicking=false;});
+  (function loop(){
+    rx+=(mx-rx)*.15;ry+=(my-ry)*.15;
+    dot.style.left=mx+'px';dot.style.top=my+'px';
+    dot.style.transform=`translate(-50%,-50%) scale(${clicking?.8:1})`;
+    ring.style.left=rx+'px';ring.style.top=ry+'px';
+    ring.style.transform=`translate(-50%,-50%) scale(${clicking?1.5:1})`;
+    requestAnimationFrame(loop);
+  })();
+
+  /* ─ SLIDES ─ */
+  gsap.registerPlugin(ScrollTrigger);
+  const TOTAL=12;
+  let cur=0,busy=false;
+
+  const slides=Array.from(document.querySelectorAll('.slide'));
+  const introEl=document.getElementById('intro');
+  const loaderEl=document.getElementById('loader');
+  const deckEl=document.getElementById('deck');
+  const dotsEl=document.getElementById('dots');
+  const hintEl=document.getElementById('hint');
+  const counterEl=document.getElementById('counter');
+  const loaderFill=document.querySelector('.loader-fill');
+  const clickPrompt=document.getElementById('click-prompt');
+  const introLogo=document.querySelector('.intro-logo');
+
+  slides.forEach((s,i)=>gsap.set(s,{y:i===0?'0%':'100%',zIndex:TOTAL-i}));
+  slides.forEach(s=>{
+    const items=Array.from(s.querySelectorAll('.e'));
+    gsap.set(items,{opacity:0,y:20,filter:'blur(4px)'});
+  });
+  slides.forEach((_,i)=>{
+    const d=document.createElement('div');
+    d.className='dot'+(i===0?' active':'');
+    d.addEventListener('click',()=>goTo(i));
+    dotsEl.appendChild(d);
+  });
+
+  function updateHUD(i){
+    document.querySelectorAll('.dot').forEach((d,j)=>d.classList.toggle('active',j===i));
+    counterEl.innerHTML=`<b>${String(i+1).padStart(2,'0')}</b> / ${String(TOTAL).padStart(2,'0')}`;
+  }
+
+  function staggerIn(slide,dir){
+    const fromY=(dir>=0)?22:-22;
+    const items=Array.from(slide.querySelectorAll('.e'));
+    gsap.killTweensOf(items);
+    gsap.set(items,{opacity:0,y:fromY,filter:'blur(4px)'});
+    gsap.to(items,{opacity:1,y:0,filter:'blur(0px)',duration:.65,stagger:.08,ease:'power3.out'});
+    /* Gantt bars animate in */
+    slide.querySelectorAll('.gantt-bar').forEach((bar,idx)=>{
+      gsap.set(bar,{scaleX:0,transformOrigin:'left center'});
+      gsap.to(bar,{scaleX:1,duration:.7,ease:'power3.out',delay:.5+idx*.07});
+    });
+  }
+
+  function staggerOut(slide,dir){
+    const items=Array.from(slide.querySelectorAll('.e'));
+    gsap.killTweensOf(items);
+    gsap.to(items,{opacity:0,y:dir>0?-16:16,filter:'blur(3px)',duration:.28,stagger:.02,ease:'power2.in'});
+  }
+
+  function goTo(next){
+    if(busy||next===cur||next<0||next>=TOTAL)return;
+    busy=true;
+    const dir=next>cur?1:-1;
+    const entering=slides[next],leaving=slides[cur];
+    const enterItems=Array.from(entering.querySelectorAll('.e'));
+    gsap.set(enterItems,{opacity:0,y:dir>0?22:-22,filter:'blur(4px)'});
+    gsap.set(entering,{y:dir>0?'100%':'-100%',zIndex:TOTAL-next});
+    gsap.set(leaving,{zIndex:TOTAL-cur});
+    staggerOut(leaving,dir);
+    gsap.to(entering,{
+      y:'0%',duration:.82,ease:'expo.inOut',
+      onComplete:()=>{
+        staggerIn(entering,dir);
+        gsap.set(leaving,{y:dir>0?'-100%':'100%'});
+        cur=next;busy=false;updateHUD(cur);
+      }
+    });
+  }
+
+  /* ─ Input: wheel con debounce correcto ─ */
+  let wt=null,lastDelta=0;
+  window.addEventListener('wheel',e=>{
+    if(wt)return;           /* ignora eventos mientras hay un timeout activo */
+    lastDelta=e.deltaY;
+    wt=setTimeout(()=>{
+      if(lastDelta>0) goTo(cur+1);
+      else if(lastDelta<0) goTo(cur-1);
+      wt=null;
+    },80);
+  },{passive:true});
+
+  let ty=0;
+  window.addEventListener('touchstart',e=>{ty=e.touches[0].clientY;},{passive:true});
+  window.addEventListener('touchend',e=>{
+    const d=ty-e.changedTouches[0].clientY;
+    if(Math.abs(d)>42){if(d>0)goTo(cur+1);else goTo(cur-1);}
+  },{passive:true});
+
+  window.addEventListener('keydown',e=>{
+    if(['ArrowDown','ArrowRight','PageDown'].includes(e.key)){e.preventDefault();goTo(cur+1);}
+    if(['ArrowUp','ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();goTo(cur-1);}
+  });
+
+  /* ─ Intro ─ */
+  gsap.set(introLogo,{opacity:0,y:16});
+  gsap.set(clickPrompt,{opacity:0});
+  gsap.timeline({delay:.3})
+    .to(introLogo,{opacity:1,y:0,duration:1.1,ease:'expo.out'})
+    .to(clickPrompt,{opacity:1,duration:.7,ease:'power2.out'},'-=.3');
+
+  introEl.addEventListener('click',()=>{
+    gsap.to(introEl,{opacity:0,duration:.4,ease:'power2.in',
+      onComplete:()=>{introEl.style.display='none';startLoader();}
+    });
+  });
+
+  function startLoader(){
+    loaderEl.style.visibility='visible';
+    gsap.to(loaderEl,{opacity:1,duration:.25});
+    gsap.to(loaderFill,{width:'100%',duration:1.4,ease:'power2.inOut',
+      onComplete:()=>setTimeout(finishLoader,180)});
+  }
+
+  function finishLoader(){
+    gsap.to(loaderEl,{opacity:0,duration:.55,ease:'power2.inOut',
+      onComplete:()=>{
+        loaderEl.style.visibility='hidden';
+        deckEl.style.visibility='visible';
+        gsap.to(deckEl,{opacity:1,duration:.45,ease:'power2.out'});
+        gsap.to([dotsEl,hintEl,counterEl],{opacity:1,duration:.6,delay:.3});
+        setTimeout(()=>staggerIn(slides[0],1),350);
+        updateHUD(0);
+        const hide=()=>gsap.to(hintEl,{opacity:0,duration:.4});
+        window.addEventListener('wheel',hide,{once:true});
+        window.addEventListener('keydown',hide,{once:true});
+        window.addEventListener('touchend',hide,{once:true});
+      }
+    });
+  }
+
+  /* Pyramid hover — CSS handles it via .pyr-level::after and .pyr-content transition */
+})();
+</script>
+</body>
+</html>

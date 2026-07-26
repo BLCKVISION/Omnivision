@@ -125,6 +125,20 @@
       </div>
     </section>
 
+    <!-- ── SEQUENCE ANIMATION ─────────────── -->
+    <section class="hero-sequence" id="sequence-section">
+      <canvas id="sequence-canvas"></canvas>
+      <div class="sequence-text" id="sequence-text">
+        <h2 id="seq-words">
+          <span class="seq-word">Precisión</span>
+          <span class="seq-word">Inigualable</span>
+          <span class="seq-word"><strong>en</strong></span>
+          <span class="seq-word"><strong>Cada</strong></span>
+          <span class="seq-word"><strong>Momento.</strong></span>
+        </h2>
+      </div>
+    </section>
+
     <!-- ── FEATURES / CARACTERÍSTICAS ─────────────── -->
     <section id="caracteristicas">
       <div class="features-grid">
@@ -240,78 +254,78 @@
     </section>
 
     <!-- ── SLIDER SECTION ─────────────── -->
-    <section id="slider-section">
-      <div class="slider-header">
-        <h2 class="slider-main-title">Diseñado para adaptarse a cualquier entorno. Escala tus operaciones de manera inteligente y segura.</h2>
-        <div class="slider-controls">
-          <button class="slider-btn" id="slider-prev" aria-label="Anterior">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
-          </button>
-          <button class="slider-btn" id="slider-next" aria-label="Siguiente">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
-          </button>
+    <section class="outro outro--fullvh" id="slider-interactivo">
+        <div class="outro-inner">
+            <!-- Step Slider -->
+            <div class="step-slider sr">
+                <!-- Visual area with images -->
+                <div class="step-visual">
+                    <div class="step-visual-panel active" data-step="0">
+                        <img src="img/Discrimina.webp" alt="Discrimina">
+                    </div>
+                    <div class="step-visual-panel" data-step="1">
+                        <img src="img/trackea.webp" alt="Trackea">
+                    </div>
+                    <div class="step-visual-panel" data-step="2">
+                        <img src="img/alerta.webp" alt="Alerta">
+                    </div>
+                </div>
+
+                <!-- Step columns side-by-side -->
+                <div class="step-columns-container">
+                    <div class="step-column active" data-step="0">
+                        <button class="step-tab active" data-step="0" data-label="Discrimina">
+                            <span class="step-tab-label">Discrimina</span>
+                            <div class="step-tab-progress"><div class="step-tab-fill"></div></div>
+                        </button>
+                        <div class="step-content active" data-step="0">
+                            <p>Diferencia entre un animal, un objeto inanimado y un ser humano con precisión YOLOv8. El motor de visión procesa cada fotograma clasificando entidades en tiempo real.</p>
+                        </div>
+                    </div>
+                    <div class="step-column" data-step="1">
+                        <button class="step-tab" data-step="1" data-label="Trackea">
+                            <span class="step-tab-label">Trackea</span>
+                            <div class="step-tab-progress"><div class="step-tab-fill"></div></div>
+                        </button>
+                        <div class="step-content" data-step="1">
+                            <p>Mantiene el ID persistente del sujeto aunque se cruce con otros individuos en escena. El seguimiento inteligente garantiza continuidad sin pérdida de identidad.</p>
+                        </div>
+                    </div>
+                    <div class="step-column" data-step="2">
+                        <button class="step-tab" data-step="2" data-label="Alerta">
+                            <span class="step-tab-label">Alerta</span>
+                            <div class="step-tab-progress"><div class="step-tab-fill"></div></div>
+                        </button>
+                        <div class="step-content" data-step="2">
+                            <p>Notifica al personal vía WebSocket, reduciendo el tiempo de respuesta a milisegundos. Las alertas llegan al panel del operador en menos de 3ms.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ── FOOTER SECTION ─────────────── -->
+    <footer id="footer">
+      <div class="footer-content">
+        <div class="footer-links">
+          <a href="#hero">QUE ES</a>
+          <a href="#caracteristicas">ARQUITECTURA</a>
+          <a href="#login">INICIAR SESION</a>
+          <a href="#contacto">SOPORTE</a>
+        </div>
+        
+        <div class="footer-logo">
+          <img src="logos/Isotipo.webp" alt="OmniVision" />
+        </div>
+        
+        <div class="footer-bottom">
+          <div class="footer-copyright">
+            2026 OMNIVISION - TODOS LOS DERECHOS RESERVADOS.
+          </div>
         </div>
       </div>
 
-      <div class="slider-container">
-        <!-- Trackea -->
-        <article class="slide-card active" data-index="0">
-          <img src="img/trackea.webp" alt="Trackea" class="slide-bg" />
-          <div class="slide-gradient"></div>
-          <div class="slide-content">
-            <div class="slide-title-wrap">
-              <svg class="slide-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-              <h3 class="slide-title">Trackea</h3>
-            </div>
-            <p class="slide-desc">Mantiene el ID persistente del sujeto aunque se cruce con otros individuos en escena. El seguimiento inteligente garantiza continuidad sin pérdida de identidad.</p>
-          </div>
-        </article>
-
-        <!-- Discrimina -->
-        <article class="slide-card" data-index="1">
-          <img src="img/Discrimina.webp" alt="Discrimina" class="slide-bg" />
-          <div class="slide-gradient"></div>
-          <div class="slide-content">
-            <div class="slide-title-wrap">
-              <svg class="slide-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
-              <h3 class="slide-title">Discrimina</h3>
-            </div>
-            <p class="slide-desc">Diferencia entre un animal, un objeto inanimado y un ser humano con precisión YOLOv8. El motor de visión procesa cada fotograma clasificando entidades en tiempo real.</p>
-          </div>
-        </article>
-
-        <!-- Alerta -->
-        <article class="slide-card" data-index="2">
-          <img src="img/alerta.webp" alt="Alerta" class="slide-bg" />
-          <div class="slide-gradient"></div>
-          <div class="slide-content">
-            <div class="slide-title-wrap">
-              <svg class="slide-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-              <h3 class="slide-title">Alerta</h3>
-            </div>
-            <p class="slide-desc">Notifica al personal vía WebSocket, reduciendo el tiempo de respuesta a milisegundos. Las alertas llegan al panel del operador en menos de 3ms.</p>
-          </div>
-        </article>
-      </div>
-    <!-- ── FOOTER SECTION ─────────────── -->
-    <footer id="footer">
-      <div class="footer-links">
-        <a href="#hero">QUE ES</a>
-        <a href="#caracteristicas">CARACTERÍSTICAS</a>
-        <a href="#omnibox">VISION-BOX</a>
-        <a href="#login">INICIAR SESIÓN</a>
-        <a href="#contacto">SOPORTE</a>
-      </div>
-
-      <div class="footer-logo">
-        <img src="logos/Isotipo.webp" alt="OmniVision" />
-      </div>
-
       <div class="footer-watermark">OMNIVISION</div>
-
-      <div class="footer-copyright">
-        2026 OMNIVISION - TODOS LOS DERECHOS RESERVADOS.
-      </div>
     </footer>
 
   </div><!-- /#site -->

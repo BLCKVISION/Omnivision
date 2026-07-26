@@ -1,0 +1,817 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Host+Grotesk:ital,wght@0,300..800;1,300..800&display=swap");
+
+:root {
+    --bg: #08090a;
+    --panel: #0f1011;
+    --txt1: #f7f8f8;
+    --txt2: #d0d6e0;
+    --txt3: #8a8f98;
+    --txt4: #62666d;
+    --accent: #5e6ad2;
+    --accent2: #7170ff;
+    --accent-light: #a5a8ff;
+    --border: rgba(255, 255, 255, 0.08);
+}
+
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    cursor: none !important;
+}
+
+html,
+body {
+    overflow-x: hidden;
+    background: var(--bg);
+    color: var(--txt1);
+}
+
+body {
+    font-family: "DM Mono", monospace;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ─── SCROLLBAR ─── */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.28);
+}
+
+/* ─── CURSOR ─── */
+.cursor {
+    position: fixed;
+    pointer-events: none;
+    z-index: 99999;
+}
+
+#cursor-dot {
+    width: 8px;
+    height: 8px;
+    background: #fff;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#cursor-ring {
+    width: 32px;
+    height: 32px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: border-color 0.2s;
+}
+
+/* ─── TYPE ─── */
+h1 {
+    font-family: "Host Grotesk", sans-serif;
+    font-size: clamp(2rem, 5vw, 4rem);
+    font-weight: 500;
+    line-height: 1.08;
+    letter-spacing: -1.5px;
+    color: var(--txt1);
+}
+
+h1 em {
+    font-style: normal;
+    background: linear-gradient(135deg, var(--accent2), var(--accent-light));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+p {
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: var(--txt3);
+    line-height: 1.7;
+}
+
+a {
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--txt1);
+}
+
+img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* ─── NAV ─── */
+nav {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    will-change: opacity, transform;
+    z-index: 100;
+}
+
+nav .logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 0 5px 10px;
+}
+
+nav .logo img {
+    height: 37px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.1));
+}
+
+/* ─── LOADER ─── */
+#loader {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+#loader-logo {
+    position: relative;
+    z-index: 2;
+    opacity: 0;
+    transform: translateY(12px);
+}
+
+#loader-logo img {
+    height: 65px;
+    width: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.15));
+    animation: loader-pulse 1.2s ease-in-out infinite alternate;
+}
+
+@keyframes loader-pulse {
+    0% {
+        opacity: 0.3;
+        transform: scale(0.95);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+}
+
+#loader-curtain {
+    position: absolute;
+    inset: 0;
+    background: var(--bg);
+    transform: translateY(100%);
+    /* starts below viewport */
+    z-index: 3;
+}
+
+/* ─── SECTIONS ─── */
+section {
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    position: relative;
+    background: var(--bg);
+}
+
+.hero {
+    perspective: 1200px;
+}
+
+/* Grid noise overlay */
+section::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.012) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.012) 1px, transparent 1px);
+    background-size: 40px 40px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 100%);
+    z-index: 0;
+}
+
+/* ─── CANVAS ─── */
+canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+/* ─── HERO CONTENT ─── */
+.hero-content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    perspective: 1200px;
+    pointer-events: none;
+}
+
+/* ─── HEADER ─── */
+.header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    text-align: center;
+    width: 90%;
+    will-change: transform, opacity;
+    pointer-events: auto;
+}
+
+/* Pill badge */
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 1rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    color: var(--txt3);
+}
+
+.badge-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent2);
+    box-shadow: 0 0 8px var(--accent2);
+    flex-shrink: 0;
+    animation: pulse-dot 2s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.4;
+    }
+}
+
+.badge-arrow {
+    color: var(--txt4);
+}
+
+.header h1 {
+    font-size: 4vw;
+    font-weight: 300;
+    line-height: 1;
+    letter-spacing: -2px;
+    color: var(--txt1);
+    padding-top: 35px;
+}
+
+.hero-sub {
+    font-size: 1.2rem;
+    color: var(--txt3);
+    line-height: 1.5;
+    font-family: "Host Grotesk", sans-serif;
+    font-weight: 300;
+    padding: 20px 0 30px 0;
+    color: var(--txt3);
+}
+
+.medium {
+    font-weight: 500;
+}
+
+/* CTA button — expanding icon circle */
+.hero-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    width: 70px;
+    height: 45px;
+    border-radius: 999px;
+    background: #fff;
+    color: #000;
+    border: none;
+    overflow: hidden;
+    white-space: nowrap;
+    text-decoration: none;
+    text-transform: none;
+    will-change: width, gap;
+    transition:
+        width 0.45s cubic-bezier(0.34, 1.4, 0.64, 1),
+        gap 0.45s cubic-bezier(0.34, 1.4, 0.64, 1),
+        padding 0.45s cubic-bezier(0.34, 1.4, 0.64, 1);
+    cursor: none !important;
+}
+
+.hero-cta:hover {
+    width: 160px;
+    gap: 0.55rem;
+    padding: 0 1.4rem;
+}
+
+.cta-text {
+    font-family: "Host Grotesk", sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: #000;
+    opacity: 0;
+    max-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    transition:
+        opacity 0.2s 0s,
+        max-width 0.4s cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+.hero-cta:hover .cta-text {
+    opacity: 1;
+    max-width: 120px;
+    transition:
+        opacity 0.3s 0.15s,
+        max-width 0.45s cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+.cta-icon {
+    flex-shrink: 0;
+    color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.hero-cta:hover .cta-icon {
+    transform: translateX(2px);
+}
+
+/* ─── HERO IMG ─── */
+.hero-img-container {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 3;
+    overflow: hidden;
+}
+
+.hero-img {
+    width: 52%;
+    will-change: transform, opacity;
+    flex-shrink: 0;
+}
+
+.hero-img img {
+    object-fit: cover;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    box-shadow: 0 0 80px rgba(94, 106, 210, 0.15), 0 40px 80px rgba(0, 0, 0, 0.6);
+}
+
+/* ─── OUTRO ─── */
+.outro {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--bg);
+    padding: 0 2rem;
+    color: var(--txt1);
+    z-index: 1;
+    min-height: 100vh;
+    font-family: "Host Grotesk", sans-serif;
+}
+
+.outro-inner {
+    width: 100%;
+    max-width: 1000px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.outro-eyebrow {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 1rem;
+}
+
+.outro-inner h1 {
+    font-size: 3.5vw;
+    font-weight: 300;
+    line-height: 1;
+    letter-spacing: -2px;
+    padding-bottom: 30px;
+}
+
+.outro-inner p {
+
+    font-size: 1.1rem;
+    color: var(--txt3);
+    line-height: 1.5;
+    font-family: "Host Grotesk", sans-serif;
+    font-weight: 300;
+    padding: 10px 0 0px 0;
+    color: var(--txt3);
+
+}
+
+.outro-lead {
+    font-size: 1.15rem;
+    line-height: 1.6;
+    color: var(--txt2);
+    max-width: 680px;
+    margin-bottom: 4rem;
+    font-family: inherit;
+    text-transform: none;
+    letter-spacing: 0;
+}
+
+.outro-lead strong {
+    color: #fff;
+    font-weight: 500;
+}
+
+.outro-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    width: 100%;
+}
+
+.outro-card {
+    background: rgba(255, 255, 255, 0.015);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2.2rem;
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(8px);
+    transition: transform 0.3s ease, border-color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.outro-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.03);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+}
+
+/* ─ Visual area (top of card) ─ */
+.oc-visual {
+    height: 200px;
+    border-radius: 10px;
+    margin: -2.2rem -2.2rem 1.8rem;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.02);
+    border-bottom: 1px solid var(--border);
+}
+
+/* Glow blob */
+.oc-glow {
+    position: absolute;
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(113, 112, 255, 0.18) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.oc-glow--red {
+    background: radial-gradient(circle, rgba(239, 68, 68, 0.18) 0%, transparent 70%);
+}
+
+/* Center icon wrapper */
+.oc-center-icon {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--accent2);
+    backdrop-filter: blur(8px);
+}
+
+/* ─ Card 1: Discrimina — concentric rings ─ */
+.oc-rings {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.oc-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(113, 112, 255, 0.15);
+    animation: ring-expand 3s ease-out infinite;
+}
+
+.oc-ring:nth-child(1) {
+    width: 80px;
+    height: 80px;
+    animation-delay: 0s;
+}
+
+.oc-ring:nth-child(2) {
+    width: 130px;
+    height: 130px;
+    animation-delay: 0.6s;
+}
+
+.oc-ring:nth-child(3) {
+    width: 180px;
+    height: 180px;
+    animation-delay: 1.2s;
+}
+
+@keyframes ring-expand {
+    0% {
+        opacity: 0.5;
+        transform: scale(0.85);
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(1.1);
+    }
+}
+
+.oc-label-pill {
+    position: absolute;
+    bottom: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    color: var(--txt4);
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border);
+    padding: 3px 10px;
+    border-radius: 999px;
+    white-space: nowrap;
+    z-index: 4;
+}
+
+/* ─ Card 2: Trackea — bounding box ─ */
+.oc-bbox {
+    position: relative;
+    width: 90px;
+    height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+}
+
+.oc-bbox-corner {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border-color: var(--accent2);
+    border-style: solid;
+    opacity: 0.7;
+}
+
+.oc-bbox-corner.tl {
+    top: 0;
+    left: 0;
+    border-width: 1.5px 0 0 1.5px;
+}
+
+.oc-bbox-corner.tr {
+    top: 0;
+    right: 0;
+    border-width: 1.5px 1.5px 0 0;
+}
+
+.oc-bbox-corner.bl {
+    bottom: 0;
+    left: 0;
+    border-width: 0 0 1.5px 1.5px;
+}
+
+.oc-bbox-corner.br {
+    bottom: 0;
+    right: 0;
+    border-width: 0 1.5px 1.5px 0;
+}
+
+.oc-id-badge {
+    position: absolute;
+    bottom: 14px;
+    right: 18px;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--accent2);
+    background: rgba(113, 112, 255, 0.08);
+    border: 1px solid rgba(113, 112, 255, 0.2);
+    padding: 3px 9px;
+    border-radius: 6px;
+    z-index: 4;
+}
+
+/* ─ Card 3: Alerta — pulse rings + notif dot ─ */
+.oc-visual--alert .oc-center-icon {
+    color: #ef4444;
+    /* Rojo para el ícono de alerta */
+    border-color: rgba(239, 68, 68, 0.2);
+}
+
+.oc-pulse-rings {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.oc-pulse-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    animation: pulse-ring-anim 2s ease-out infinite;
+}
+
+.oc-pulse-ring:nth-child(1) {
+    width: 90px;
+    height: 90px;
+    animation-delay: 0s;
+}
+
+.oc-pulse-ring:nth-child(2) {
+    width: 140px;
+    height: 140px;
+    animation-delay: 0.7s;
+}
+
+@keyframes pulse-ring-anim {
+    0% {
+        opacity: 0.6;
+        transform: scale(0.9);
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(1.15);
+    }
+}
+
+.oc-notif-dot {
+    position: absolute;
+    top: -3px;
+    right: -3px;
+    width: 10px;
+    height: 10px;
+    background: #ef4444;
+    border-radius: 50%;
+    box-shadow: 0 0 8px rgba(239, 68, 68, 0.8);
+    animation: notif-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes notif-pulse {
+
+    0%,
+    100% {
+        box-shadow: 0 0 6px rgba(239, 68, 68, 0.8);
+    }
+
+    50% {
+        box-shadow: 0 0 16px rgba(239, 68, 68, 0.9);
+    }
+}
+
+.oc-ws-line {
+    position: absolute;
+    bottom: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    color: rgba(239, 68, 68, 0.6);
+    white-space: nowrap;
+    z-index: 4;
+}
+
+/* ─ Card body (bottom) ─ */
+.oc-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    flex: 1;
+}
+
+.oc-body h3 {
+    font-size: 1.15rem;
+    font-weight: 500;
+    color: var(--txt1);
+    letter-spacing: -0.4px;
+}
+
+.oc-body p {
+    font-size: 0.88rem;
+    line-height: 1.6;
+    color: var(--txt3);
+    text-transform: none;
+    letter-spacing: 0;
+    flex: 1;
+}
+
+.oc-btn {
+    align-self: flex-start;
+    margin-top: 0.5rem;
+    padding: 0.45rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-family: "DM Mono", monospace;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--txt2);
+    letter-spacing: 0.04em;
+    cursor: none !important;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.oc-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
+.outro-tag {
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--txt4);
+}
+
+@media(max-width: 900px) {
+    .outro-cards {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+.italic {
+    font-style: italic;
+}

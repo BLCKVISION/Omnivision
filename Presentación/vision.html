@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OmniVision — Presentation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Host+Grotesk:ital,wght@0,300..800;1,300..800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="vision.css">
+</head>
+
+<body>
+    <!-- Custom Cursor -->
+    <div id="cursor-dot" class="cursor"></div>
+    <div id="cursor-ring" class="cursor"></div>
+
+    <!-- Hover Preview Overlay -->
+    <div id="outro-hover-preview"><img src="" alt=""></div>
+
+    <div id="omni-view">
+
+        <!-- Loader -->
+        <div id="loader">
+            <div id="loader-content">
+                <img id="loader-isotipo" src="logos/Isotipo 2.png" alt="OmniVision Isotipo">
+                <div id="loader-logotipo-wrapper">
+                    <img id="loader-logotipo" src="logos/Logotipo.png" alt="OmniVision Logotipo">
+                </div>
+            </div>
+        </div>
+
+        <nav id="navbar">
+            <div class="nb-left">
+                <img src="logos/Logotipo.png" alt="Logotipo" class="nav-logo">
+            </div>
+            
+            <!-- Center: Nav Links -->
+            <div class="nb-center">
+                <a href="#arquitectura" class="nb-link"><span>Arquitectura</span></a>
+                <a href="#caracteristicas" class="nb-link"><span>Características</span></a>
+            </div>
+
+            <!-- Right: CTA -->
+            <div class="nb-right">
+                <a href="/login" class="nb-cta">Iniciar sesión</a>
+            </div>
+        </nav>
+
+
+        <section class="hero">
+            <canvas></canvas>
+
+            <div class="hero-content">
+                <div class="header">
+                    <h1>Redefiniendo el Futuro<br>de la <em>Seguridad</em></h1>
+                    <p class="hero-sub"> <span class="medium">OmniVision</span> monitorea, analiza e interpreta el
+                        comportamiento <br> humano ante posibles amenazas <span class="medium">impulsado por IA</span>
+                    </p>
+                </div>
+            </div>
+
+            <div class="hero-img-container">
+                <div class="hero-bg-reveal"></div>
+                <div class="hero-img"><img src="img/dashboard.png" alt=""></div>
+            </div>
+
+        </section>
+
+        <!-- C. ¿De qué se trata OmniVision? -->
+        <section id="que-es" class="lp-section lp-section--fullvh que-es-hero">
+            <div class="marquee-wrap sr">
+                <div class="marquee-track">
+                    <span class="marquee-text">Donde la <em>Intuición</em> Humana se Encuentra con la <em>Precisión</em> de la IA &nbsp;&nbsp;&bull;&nbsp;&nbsp;</span>
+                    <span class="marquee-text">Donde la <em>Intuición</em> Humana se Encuentra con la <em>Precisión</em> de la IA &nbsp;&nbsp;&bull;&nbsp;&nbsp;</span>
+                    <span class="marquee-text">Donde la <em>Intuición</em> Humana se Encuentra con la <em>Precisión</em> de la IA &nbsp;&nbsp;&bull;&nbsp;&nbsp;</span>
+                </div>
+            </div>
+
+            <div class="que-es-layout">
+                <div class="que-es-info-grid sr">
+                    <div class="que-es-info-left">
+                        <p class="que-es-desc">
+                            Nuestra tecnología está diseñada para fusionar la precisión de la
+                            robótica con la adaptabilidad de la inteligencia artificial,
+                            desbloqueando posibilidades infinitas en seguridad, manufactura
+                            y la vida cotidiana.
+                        </p>
+
+                        <div class="que-es-pills">
+                            <span class="lp-pill">Impacto Comprobado</span>
+                            <span class="lp-pill lp-pill--active">IA</span>
+                            <span class="lp-pill">Seguridad</span>
+                        </div>
+                    </div>
+                    <div class="que-es-info-right">
+                        <div class="que-es-email">
+                            omnivision@contacto.com
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="outro outro--fullvh" id="nosotros">
+            <div class="outro-inner">
+
+                <!-- Guardado para referencia:
+                <p class="outro-lead sr">Un sistema de <strong>visión computacional</strong> diseñado para fortalecer la
+                    infraestructura pública mediante el procesamiento de datos en <strong>tiempo real</strong> bajo estándares de
+                    soberanía tecnológica.
+                </p>
+                -->
+
+                <!-- Step Slider -->
+                <div class="step-slider sr">
+                    <!-- Visual area with images -->
+                    <div class="step-visual">
+                        <div class="step-visual-panel active" data-step="0">
+                            <img src="img/Discrimina.png" alt="Discrimina">
+                        </div>
+                        <div class="step-visual-panel" data-step="1">
+                            <img src="img/trackea.png" alt="Trackea">
+                        </div>
+                        <div class="step-visual-panel" data-step="2">
+                            <img src="img/alerta.png" alt="Alerta">
+                        </div>
+                    </div>
+
+                    <!-- Step columns side-by-side -->
+                    <div class="step-columns-container">
+                        <div class="step-column active" data-step="0">
+                            <button class="step-tab active" data-step="0" data-label="Discrimina">
+                                <span class="step-tab-label">Discrimina</span>
+                                <div class="step-tab-progress"><div class="step-tab-fill"></div></div>
+                            </button>
+                            <div class="step-content active" data-step="0">
+                                <p>Diferencia entre un animal, un objeto inanimado y un ser humano con precisión YOLOv8. El motor de visión procesa cada fotograma clasificando entidades en tiempo real.</p>
+                            </div>
+                        </div>
+                        <div class="step-column" data-step="1">
+                            <button class="step-tab" data-step="1" data-label="Trackea">
+                                <span class="step-tab-label">Trackea</span>
+                                <div class="step-tab-progress"><div class="step-tab-fill"></div></div>
+                            </button>
+                            <div class="step-content" data-step="1">
+                                <p>Mantiene el ID persistente del sujeto aunque se cruce con otros individuos en escena. El seguimiento inteligente garantiza continuidad sin pérdida de identidad.</p>
+                            </div>
+                        </div>
+                        <div class="step-column" data-step="2">
+                            <button class="step-tab" data-step="2" data-label="Alerta">
+                                <span class="step-tab-label">Alerta</span>
+                                <div class="step-tab-progress"><div class="step-tab-fill"></div></div>
+                            </button>
+                            <div class="step-content" data-step="2">
+                                <p>Notifica al personal vía WebSocket, reduciendo el tiempo de respuesta a milisegundos. Las alertas llegan al panel del operador en menos de 3ms.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </div> <!-- close omni-view -->
+
+    <!-- Lightbox -->
+    <div id="arch-lightbox" class="arch-lb-overlay">
+        <div class="arch-lb-inner">
+            <button class="arch-lb-close" id="arch-lb-close">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+            <div class="arch-lb-content">
+                <div class="arch-lb-img-wrap">
+                    <img src="img/arch_lightbox.png" alt="Arquitectura" class="arch-lb-img">
+                </div>
+                <div class="arch-lb-info">
+                    <span class="arch-lb-eyebrow" id="arch-lb-num">01.</span>
+                    <h3 class="arch-lb-title" id="arch-lb-title">Cámara IP</h3>
+                    <p class="arch-lb-desc" id="arch-lb-desc">Ingreso de la señal de vídeo en vivo (24/7) mediante protocolo RTSP.</p>
+                    <div class="arch-lb-tags">
+                        <span class="arch-lb-tag">RTSP</span>
+                        <span class="arch-lb-tag">24/7</span>
+                        <span class="arch-lb-tag">HD</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- D. Arquitectura del Sistema -->
+    <section id="arquitectura" class="lp-section bg-alt">
+        <div class="lp-container">
+            
+            <div class="arch-title-block sr">
+                <div class="arch-sec-label">ARQUITECTURA</div>
+                <h2 class="arch-main-title">Arquitectura del <em>Sistema</em></h2>
+                <p class="arch-main-desc">Procesamiento en tiempo real local sin depender de la nube. Diseñado para garantizar mínima latencia y soberanía tecnológica en cada etapa.</p>
+            </div>
+            
+            <div class="arch-modern-layout">
+                <div class="arch-pipeline-container sr">
+                    <!-- Step 1 -->
+                    <div class="pipeline-card active" data-step="0">
+                        <div class="pipeline-card-top">
+                            <span class="pipeline-card-num">01.</span>
+                        </div>
+                        <div class="pipeline-card-visual">
+                            <div class="pipeline-glow"></div>
+                            <svg width="36" height="36" fill="none" stroke="var(--accent2)" stroke-width="1.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                        </div>
+                        <div class="pipeline-card-bottom">
+                            <div class="pipeline-card-icon">
+                                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            </div>
+                            <h3>Cámara IP</h3>
+                            <p class="pipeline-card-desc">Ingreso de la señal de vídeo en vivo (24/7) mediante protocolo RTSP.</p>
+                        </div>
+                    </div>
+                    <!-- Step 2 -->
+                    <div class="pipeline-card" data-step="1">
+                        <div class="pipeline-card-top">
+                            <span class="pipeline-card-num">02.</span>
+                        </div>
+                        <div class="pipeline-card-visual">
+                            <div class="pipeline-glow"></div>
+                            <svg width="36" height="36" fill="none" stroke="var(--accent2)" stroke-width="1.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                        </div>
+                        <div class="pipeline-card-bottom">
+                            <div class="pipeline-card-icon">
+                                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                            </div>
+                            <h3>OmniBox (Edge)</h3>
+                            <p class="pipeline-card-desc">Decodifica el video localmente con la NPU de la SBC D-Robotics RDK X5 sin enviar datos a internet.</p>
+                        </div>
+                    </div>
+                    <!-- Step 3 -->
+                    <div class="pipeline-card" data-step="2">
+                        <div class="pipeline-card-top">
+                            <span class="pipeline-card-num">03.</span>
+                        </div>
+                        <div class="pipeline-card-visual">
+                            <div class="pipeline-glow"></div>
+                            <svg width="36" height="36" fill="none" stroke="var(--accent2)" stroke-width="1.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364.364l-.707.707M21 12h-1M4 12H3m3.343-5.657l.707-.707m2.828 9.9a5 5 0 113.622 0A3 3 0 0012 17v0z"/></svg>
+                        </div>
+                        <div class="pipeline-card-bottom">
+                            <div class="pipeline-card-icon">
+                                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364.364l-.707.707M21 12h-1M4 12H3m3.343-5.657l.707-.707m2.828 9.9a5 5 0 113.622 0A3 3 0 0012 17v0z"/></svg>
+                            </div>
+                            <h3>Motor de Visión</h3>
+                            <p class="pipeline-card-desc">Procesamiento paralelo con OpenCV y YOLOv8 detectando personas y objetos en tiempo real.</p>
+                        </div>
+                    </div>
+                    <!-- Step 4 -->
+                    <div class="pipeline-card" data-step="3">
+                        <div class="pipeline-card-top">
+                            <span class="pipeline-card-num">04.</span>
+                        </div>
+                        <div class="pipeline-card-visual">
+                            <div class="pipeline-glow"></div>
+                            <svg width="36" height="36" fill="none" stroke="var(--accent2)" stroke-width="1.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+                        </div>
+                        <div class="pipeline-card-bottom">
+                            <div class="pipeline-card-icon">
+                                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+                            </div>
+                            <h3>Gemini LLM</h3>
+                            <p class="pipeline-card-desc">Un modelo de lenguaje describe y contextualiza la escena de las alertas para dar más información.</p>
+                        </div>
+                    </div>
+                    <!-- Step 5 -->
+                    <div class="pipeline-card" data-step="4">
+                        <div class="pipeline-card-top">
+                            <span class="pipeline-card-num">05.</span>
+                        </div>
+                        <div class="pipeline-card-visual">
+                            <div class="pipeline-glow"></div>
+                            <svg width="36" height="36" fill="none" stroke="var(--accent2)" stroke-width="1.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/></svg>
+                        </div>
+                        <div class="pipeline-card-bottom">
+                            <div class="pipeline-card-icon">
+                                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/></svg>
+                            </div>
+                            <h3>API + BFF</h3>
+                            <p class="pipeline-card-desc">Orquestación y distribución segura de datos a través de FastAPI y NestJS.</p>
+                        </div>
+                    </div>
+                    <!-- Step 6 -->
+                    <div class="pipeline-card" data-step="5">
+                        <div class="pipeline-card-top">
+                            <span class="pipeline-card-num">06.</span>
+                        </div>
+                        <div class="pipeline-card-visual">
+                            <div class="pipeline-glow"></div>
+                            <svg width="36" height="36" fill="none" stroke="var(--accent2)" stroke-width="1.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                        </div>
+                        <div class="pipeline-card-bottom">
+                            <div class="pipeline-card-icon">
+                                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                            </div>
+                            <h3>Panel Next.js</h3>
+                            <p class="pipeline-card-desc">Visualización en vivo de KPIs y clips de alertas con bounding boxes para el operador.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </section>
+
+    <!-- STATS SECTION -->
+    <section id="estadisticas" class="stats-section">
+        <div class="stats-glass-grid">
+
+            <!-- Card 1: Latencia -->
+            <div class="stat-glass-card sr">
+                <div class="stat-glass-header">
+                    <span class="stat-glass-eyebrow">Rendimiento Edge</span>
+                    <span class="stat-glass-badge">TIEMPO REAL</span>
+                </div>
+                <div class="stat-glass-chart-wrap">
+                    <svg class="stat-sparkline" viewBox="0 0 220 70" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="grad-lat" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="rgba(113,112,255,0.3)"/>
+                                <stop offset="100%" stop-color="rgba(113,112,255,0)"/>
+                            </linearGradient>
+                            <filter id="glow-lat"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+                        </defs>
+                        <path d="M0,65 C20,62 40,52 65,32 C82,16 100,5 115,5 C130,5 148,20 168,44 C184,60 202,67 220,68 L220,70 L0,70 Z" fill="url(#grad-lat)" opacity="0.3"/>
+                        <path d="M0,65 C20,62 40,52 65,32 C82,16 100,5 115,5 C130,5 148,20 168,44 C184,60 202,67 220,68" stroke="rgba(255,255,255,0.75)" stroke-width="2" stroke-linecap="round"/>
+                        <circle cx="115" cy="5" r="14" fill="rgba(113,112,255,0.12)" filter="url(#glow-lat)"/>
+                        <circle cx="115" cy="5" r="6" fill="rgba(160,158,255,0.5)"/>
+                        <circle cx="115" cy="5" r="3.5" fill="rgba(230,228,255,0.98)"/>
+                    </svg>
+                </div>
+                <div class="stat-glass-metric">
+                    <p class="stat-glass-label">Latencia de alerta</p>
+                    <div class="stat-glass-number-row">
+                        <span class="stat-counter stat-glass-number" data-target="3">0</span>
+                        <span class="stat-glass-suffix">ms</span>
+                    </div>
+                    <p class="stat-glass-sub">Tiempo hasta el panel del operador</p>
+                </div>
+                <div class="stat-glass-glow"></div>
+            </div>
+
+            <!-- Card 2: Precisión -->
+            <div class="stat-glass-card sr">
+                <div class="stat-glass-header">
+                    <span class="stat-glass-eyebrow">Detección YOLOv8</span>
+                    <span class="stat-glass-badge">VERIFICADO</span>
+                </div>
+                <div class="stat-glass-chart-wrap">
+                    <svg class="stat-sparkline" viewBox="0 0 220 70" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="grad-prec" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="rgba(113,112,255,0.3)"/>
+                                <stop offset="100%" stop-color="rgba(113,112,255,0)"/>
+                            </linearGradient>
+                            <filter id="glow-prec"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+                        </defs>
+                        <path d="M0,55 C20,48 40,28 65,12 C82,3 100,2 120,2 C142,2 165,5 185,8 C200,10 212,11 220,11 L220,70 L0,70 Z" fill="url(#grad-prec)" opacity="0.3"/>
+                        <path d="M0,55 C20,48 40,28 65,12 C82,3 100,2 120,2 C142,2 165,5 185,8 C200,10 212,11 220,11" stroke="rgba(255,255,255,0.75)" stroke-width="2" stroke-linecap="round"/>
+                        <circle cx="120" cy="2" r="14" fill="rgba(113,112,255,0.12)" filter="url(#glow-prec)"/>
+                        <circle cx="120" cy="2" r="6" fill="rgba(160,158,255,0.5)"/>
+                        <circle cx="120" cy="2" r="3.5" fill="rgba(230,228,255,0.98)"/>
+                    </svg>
+                </div>
+                <div class="stat-glass-metric">
+                    <p class="stat-glass-label">Precisión de detección</p>
+                    <div class="stat-glass-number-row">
+                        <span class="stat-counter stat-glass-number" data-target="99.7">0</span>
+                        <span class="stat-glass-suffix">%</span>
+                    </div>
+                    <p class="stat-glass-sub">Clasificación de entidades en escena</p>
+                </div>
+                <div class="stat-glass-glow"></div>
+            </div>
+
+            <!-- Card 3: Monitoreo -->
+            <div class="stat-glass-card sr">
+                <div class="stat-glass-header">
+                    <span class="stat-glass-eyebrow">Disponibilidad</span>
+                    <span class="stat-glass-badge">CONTINUO</span>
+                </div>
+                <div class="stat-glass-chart-wrap">
+                    <svg class="stat-sparkline" viewBox="0 0 220 70" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="grad-up" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="rgba(113,112,255,0.3)"/>
+                                <stop offset="100%" stop-color="rgba(113,112,255,0)"/>
+                            </linearGradient>
+                            <filter id="glow-up"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+                        </defs>
+                        <path d="M0,14 C20,13 40,15 65,12 C85,10 105,11 130,10 C155,9 175,11 200,10 C210,10 215,10 220,10 L220,70 L0,70 Z" fill="url(#grad-up)" opacity="0.3"/>
+                        <path d="M0,14 C20,13 40,15 65,12 C85,10 105,11 130,10 C155,9 175,11 200,10 C210,10 215,10 220,10" stroke="rgba(255,255,255,0.75)" stroke-width="2" stroke-linecap="round"/>
+                        <circle cx="220" cy="10" r="14" fill="rgba(113,112,255,0.12)" filter="url(#glow-up)"/>
+                        <circle cx="220" cy="10" r="6" fill="rgba(160,158,255,0.5)"/>
+                        <circle cx="220" cy="10" r="3.5" fill="rgba(230,228,255,0.98)"/>
+                    </svg>
+                </div>
+                <div class="stat-glass-metric">
+                    <p class="stat-glass-label">Monitoreo continuo</p>
+                    <div class="stat-glass-number-row">
+                        <span class="stat-counter stat-glass-number" data-target="24">0</span>
+                        <span class="stat-glass-suffix">/7</span>
+                    </div>
+                    <p class="stat-glass-sub">Sin interrupciones en el sistema</p>
+                </div>
+                <div class="stat-glass-glow"></div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- E. Hardware: Vision-Box -->
+    <section id="vision-box" class="vb-section-100vh lp-section">
+        <!-- Title at top -->
+        <div class="vb-header-top sr">
+            <div class="vb-header-label">HARDWARE</div>
+            <h2 class="vb-header-title">Vision<span class="vb-dash">-</span><em>Box</em></h2>
+        </div>
+
+        <!-- Full-bleed 100vw image with gradient fade -->
+        <div class="vb-fullbleed-wrap sr">
+            <img src="img/Omnibox-16-9.png" alt="OmniVision Vision-Box" class="vb-fullbleed-img">
+            <div class="vb-fullbleed-gradient"></div>
+
+            <!-- Callout 1 (Left Top) -->
+            <div class="vb-callout vb-callout--left-top">
+                <div class="callout-pulse"></div>
+                <div class="callout-dot"></div>
+                <div class="callout-line"></div>
+                <div class="callout-box">
+                    <div class="callout-icon">
+                        <svg width="14" height="14" fill="none" stroke="var(--accent2)" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.288 15.038a5.25 5.25 0 017.424 0M5.106 11.856c3.807-3.808 9.98-3.808 13.788 0M1.924 8.674c5.565-5.565 14.587-5.565 20.152 0M12.53 18.22l-.53.53-.53-.53a.75.75 0 011.06 0z"/></svg>
+                    </div>
+                    <div class="callout-text">
+                        <h4>Conectividad</h4>
+                        <p>BNC × 4 · GbE · USB-C · HDMI</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Callout 2 (Left Bottom) -->
+            <div class="vb-callout vb-callout--left-bottom">
+                <div class="callout-pulse"></div>
+                <div class="callout-dot"></div>
+                <div class="callout-line"></div>
+                <div class="callout-box">
+                    <div class="callout-icon">
+                        <svg width="14" height="14" fill="none" stroke="var(--accent2)" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-1.5h10.5a2.25 2.25 0 002.25-2.25V6.75a2.25 2.25 0 00-2.25-2.25H6.75A2.25 2.25 0 004.5 6.75v10.5a2.25 2.25 0 002.25 2.25zm.75-12h9v9h-9v-9z"/></svg>
+                    </div>
+                    <div class="callout-text">
+                        <h4>Edge Computing</h4>
+                        <p>Inferencia local · sin latencia cloud</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Callout 3 (Right Top) -->
+            <div class="vb-callout vb-callout--right-top">
+                <div class="callout-box">
+                    <div class="callout-icon">
+                        <svg width="14" height="14" fill="none" stroke="var(--accent2)" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364.364l-.707.707M21 12h-1M4 12H3m3.343-5.657l.707-.707m2.828 9.9a5 5 0 113.622 0A3 3 0 0012 17v0z"/></svg>
+                    </div>
+                    <div class="callout-text">
+                        <h4>NPU D-Robotics</h4>
+                        <p>RDK X5 · acelerador IA · fanless</p>
+                    </div>
+                </div>
+                <div class="callout-line"></div>
+                <div class="callout-dot"></div>
+                <div class="callout-pulse"></div>
+            </div>
+
+            <!-- Callout 4 (Right Bottom) -->
+            <div class="vb-callout vb-callout--right-bottom">
+                <div class="callout-box">
+                    <div class="callout-icon">
+                        <svg width="14" height="14" fill="none" stroke="var(--accent2)" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/></svg>
+                    </div>
+                    <div class="callout-text">
+                        <h4>Soberanía Total</h4>
+                        <p>Datos en sitio · sin nube externa</p>
+                    </div>
+                </div>
+                <div class="callout-line"></div>
+                <div class="callout-dot"></div>
+                <div class="callout-pulse"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- F. Características Principales -->
+    <section id="caracteristicas" class="feat-slider-section">
+        <!-- Sec bar BLCK style -->
+        <div class="feat-sec-bar">
+            <span class="feat-sec-left">CARACTERÍSTICAS</span>
+            <span class="feat-sec-right">01 — 06</span>
+        </div>
+
+        <!-- Slider Track -->
+        <div class="feat-slider-track" id="featSliderTrack">
+
+            <!-- Slide 1 -->
+            <div class="feat-slide active" data-index="0">
+                <div class="feat-slide-visual">
+                    <img src="img/feat_realtime.png" alt="Análisis en tiempo real" class="feat-slide-img">
+                    <div class="feat-slide-overlay"></div>
+                </div>
+                <div class="feat-slide-content">
+                    <span class="feat-slide-num">01</span>
+                    <span class="feat-slide-badge">TIEMPO REAL</span>
+                    <h2 class="feat-slide-title">Análisis en<br><em>tiempo real</em></h2>
+                    <p class="feat-slide-desc">Procesamiento instantáneo en milisegundos. Cada fotograma analizado sin demora perceptible para el operador.</p>
+                </div>
+            </div>
+
+            <!-- Slide 2 -->
+            <div class="feat-slide" data-index="1">
+                <div class="feat-slide-visual">
+                    <img src="img/feat_detection.png" alt="Detección configurable" class="feat-slide-img">
+                    <div class="feat-slide-overlay"></div>
+                </div>
+                <div class="feat-slide-content">
+                    <span class="feat-slide-num">02</span>
+                    <span class="feat-slide-badge">FLEXIBILIDAD</span>
+                    <h2 class="feat-slide-title">Detección<br><em>configurable</em></h2>
+                    <p class="feat-slide-desc">Ajusta el nivel de sensibilidad según la zona. Define áreas de exclusión y umbrales de detección por cámara.</p>
+                </div>
+            </div>
+
+            <!-- Slide 3 -->
+            <div class="feat-slide" data-index="2">
+                <div class="feat-slide-visual">
+                    <img src="img/feat_annotated.png" alt="Vistas anotadas" class="feat-slide-img">
+                    <div class="feat-slide-overlay"></div>
+                </div>
+                <div class="feat-slide-content">
+                    <span class="feat-slide-num">03</span>
+                    <span class="feat-slide-badge">VISUALIZACIÓN</span>
+                    <h2 class="feat-slide-title">Vistas<br><em>anotadas</em></h2>
+                    <p class="feat-slide-desc">Bounding boxes claras sobre objetos y personas con scores de confianza y IDs de seguimiento en pantalla.</p>
+                </div>
+            </div>
+
+            <!-- Slide 4 -->
+            <div class="feat-slide" data-index="3">
+                <div class="feat-slide-visual">
+                    <img src="img/feat_multicam.png" alt="Multicanal" class="feat-slide-img">
+                    <div class="feat-slide-overlay"></div>
+                </div>
+                <div class="feat-slide-content">
+                    <span class="feat-slide-num">04</span>
+                    <span class="feat-slide-badge">PARALELISMO</span>
+                    <h2 class="feat-slide-title">Monitoreo<br><em>multicanal</em></h2>
+                    <p class="feat-slide-desc">Monitorea múltiples cámaras simultáneamente desde un único punto de control centralizado.</p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Navigation -->
+        <div class="feat-slider-nav">
+            <div class="feat-slider-tabs">
+                <button class="feat-tab active" data-feat="0">01. Tiempo Real</button>
+                <button class="feat-tab" data-feat="1">02. Detección</button>
+                <button class="feat-tab" data-feat="2">03. Anotaciones</button>
+                <button class="feat-tab" data-feat="3">04. Multicanal</button>
+            </div>
+            <div class="feat-slider-arrows">
+                <button class="feat-arrow" id="featPrev">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+                </button>
+                <button class="feat-arrow" id="featNext">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Progress bar -->
+        <div class="feat-progress-bar"><div class="feat-progress-fill" id="featProgressFill"></div></div>
+    </section>
+
+    <!-- G. Consultas Habituales -->
+    <section id="consultas" class="consultas-section">
+        <div class="consultas-sec-bar">
+            <span class="consultas-sec-left">CONSULTAS</span>
+            <span class="consultas-sec-right">FAQ</span>
+        </div>
+        <div class="consultas-inner">
+            <div class="consultas-left">
+                <h2 class="consultas-title"><span class="consultas-reg">Dudas</span><br>habituales</h2>
+                <p class="consultas-sub">Todo lo que necesitas saber sobre el sistema OmniVision.</p>
+            </div>
+            <div class="consultas-list" id="consultasList">
+                <div class="consulta-item sr">
+                    <button class="consulta-btn">
+                        <span class="consulta-q">¿Qué entra por el canal?</span>
+                        <span class="consulta-icon">+</span>
+                    </button>
+                    <div class="consulta-body">
+                        <div class="consulta-body-inner">
+                            <p>Secuencias e imágenes de las cámaras que son analizadas fotograma a fotograma localmente.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="consulta-item sr">
+                    <button class="consulta-btn">
+                        <span class="consulta-q">¿Se puede cambiar el modelo de detección?</span>
+                        <span class="consulta-icon">+</span>
+                    </button>
+                    <div class="consulta-body">
+                        <div class="consulta-body-inner">
+                            <p>Sí, la arquitectura de IA es adaptable para integrarse con modelos especializados según el caso de uso.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="consulta-item sr">
+                    <button class="consulta-btn">
+                        <span class="consulta-q">¿Qué ocurre si no hay señal en una cámara?</span>
+                        <span class="consulta-icon">+</span>
+                    </button>
+                    <div class="consulta-body">
+                        <div class="consulta-body-inner">
+                            <p>El sistema muestra una vista previa neutra sin romper el layout general del panel operador.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="consulta-item sr">
+                    <button class="consulta-btn">
+                        <span class="consulta-q">¿Dónde veo las alertas?</span>
+                        <span class="consulta-icon">+</span>
+                    </button>
+                    <div class="consulta-body">
+                        <div class="consulta-body-inner">
+                            <p>Directamente en el tablero interactivo junto al vídeo en vivo, sin necesidad de cambiar de aplicación.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="consulta-item sr">
+                    <button class="consulta-btn">
+                        <span class="consulta-q">¿El sistema requiere internet para operar?</span>
+                        <span class="consulta-icon">+</span>
+                    </button>
+                    <div class="consulta-body">
+                        <div class="consulta-body-inner">
+                            <p>No. Todo el procesamiento ocurre localmente en la OmniBox. Internet es opcional para actualizaciones remotas.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- H. Pie de Página -->
+    <footer class="lp-footer">
+        <div class="lp-container footer-content">
+            <div class="footer-logo">
+                <img src="logos/Logotipo 3.png" alt="OmniVision"
+                    style="height: 35px; margin-bottom: 1rem; filter: drop-shadow(0 0 10px rgba(255,255,255,0.1));">
+                <p style="max-width: 300px; color: var(--txt3);">Vídeo por canal, análisis por fotograma y decisiones en
+                    un solo panel.</p>
+            </div>
+            <div class="footer-links">
+                <a href="#que-es">Qué es</a>
+                <a href="#arquitectura">Arquitectura</a>
+                <a href="/login">Iniciar sesión</a>
+                <a href="#consultas">Soporte</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 OmniVision. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- CDN Dependencies -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+
+    <script src="vision.js"></script>
+</body>
+
+</html>

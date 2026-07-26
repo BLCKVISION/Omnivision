@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>OmniVision — Presentación</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;cursor:none!important;}
+
+/* ── TOKENS (del dashboard) ── */
+:root{
+  --bg:#08090a;--panel:#0f1011;--surface:#191a1b;--surface2:#28282c;
+  --txt1:#f7f8f8;--txt2:#d0d6e0;--txt3:#8a8f98;--txt4:#62666d;
+  --accent:#5e6ad2;--accent2:#7170ff;
+  --border:rgba(255,255,255,0.08);--border-s:rgba(255,255,255,0.05);
+  --green:#10b981;
+}
+
+html{font-size:16px;}
+body{
+  background:var(--bg);color:var(--txt1);
+  font-family:"Inter",system-ui,sans-serif;
+  font-feature-settings:"cv01","ss03";
+  font-optical-sizing:auto;
+  overflow:hidden;height:100vh;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ── CURSOR PERSONALIZADO (igual al dashboard/login) ── */
+.custom-cursor{
+  position:fixed;pointer-events:none;z-index:99999;
+  transition:transform .1s ease-out,opacity .2s ease;
+}
+#cursor-dot{
+  width:8px;height:8px;background:#fff;border-radius:50%;
+  transform:translate(-50%,-50%);
+}
+#cursor-ring{
+  width:32px;height:32px;
+  border:1px solid rgba(255,255,255,.4);border-radius:50%;
+  transform:translate(-50%,-50%);
+}
+
+/* ── INTRO (full-screen click) ── */
+#intro{
+  position:fixed;inset:0;z-index:9999;background:var(--bg);
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+}
+
+/* Grid de fondo sutil */
+#intro::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(255,255,255,.014) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.014) 1px,transparent 1px);
+  background-size:40px 40px;
+  mask-image:radial-gradient(ellipse 70% 70% at 50% 50%,black 20%,transparent 100%);
+}
+
+/* Logo centrado grande */
+.intro-logo{
+  position:relative;z-index:2;
+  opacity:0;
+}
+.intro-logo img{
+  height:88px;object-fit:contain;
+  filter:drop-shadow(0 0 40px rgba(255,255,255,.15));
+}
+
+/* Click prompt — fijado al fondo centrado */
+#click-prompt{
+  position:absolute;bottom:48px;left:50%;transform:translateX(-50%);
+  z-index:2;display:flex;flex-direction:column;align-items:center;gap:10px;
+  opacity:0;
+}
+#click-prompt span{
+  font-size:10px;font-weight:500;letter-spacing:.36em;
+  text-transform:uppercase;color:var(--txt4);
+}
+#click-prompt svg{
+  color:var(--txt4);
+  animation:bounce 2.2s ease-in-out infinite;
+}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
+
+/* ── LOADER — solo barra, sin texto ni isotipo ── */
+#loader{
+  position:fixed;inset:0;z-index:9998;background:var(--bg);
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  opacity:0;visibility:hidden;pointer-events:none;
+}
+.loader-track{width:min(400px,72vw);height:1px;background:var(--border-s);}
+.loader-fill{width:0%;height:100%;background:rgba(255,255,255,.45);}
+
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.2}}
+@keyframes loaderSwipe{
+  0%   {left:-10%;width:0%}
+  40%  {left:0%;width:60%}
+  100% {left:100%;width:10%}
+}
+
+/* ── DECK ── */
+#deck{position:fixed;inset:0;overflow:hidden;opacity:0;visibility:hidden;}
+.slide{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  padding:64px clamp(28px,7vw,112px);
+  background:var(--bg);overflow:hidden;will-change:transform;
+}
+.slide::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(255,255,255,.014) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.014) 1px,transparent 1px);
+  background-size:40px 40px;
+  mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 20%,transparent 100%);
+}
+
+/* ── HUD ── */
+#dots{
+  position:fixed;bottom:32px;left:50%;transform:translateX(-50%);
+  z-index:200;display:flex;gap:8px;align-items:center;opacity:0;
+}
+.dot{
+  width:5px;height:5px;border-radius:999px;
+  background:rgba(255,255,255,.2);
+  transition:background .35s,width .35s;cursor:none;
+}
+.dot.active{background:var(--txt1);width:20px;}
+#counter{
+  position:fixed;top:28px;right:36px;z-index:200;
+  font-size:11px;font-weight:500;letter-spacing:.18em;
+  color:var(--txt4);opacity:0;
+}
+#counter b{color:var(--txt2);}
+#hint{
+  position:fixed;bottom:76px;left:50%;transform:translateX(-50%);
+  z-index:200;font-size:10px;font-weight:500;
+  letter-spacing:.32em;text-transform:uppercase;
+  color:var(--txt4);display:flex;align-items:center;gap:8px;opacity:0;
+}
+#hint svg{animation:bounce 2.4s ease-in-out infinite;}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
+
+/* Logo en el slide de cierre */
+.slide-logo{height:44px;object-fit:contain;margin-bottom:4px;
+  filter:drop-shadow(0 0 20px rgba(255,255,255,.1));}
+
+/* ── INNER ── */
+.inner{
+  width:100%;max-width:1240px;margin:0 auto;
+  display:flex;flex-direction:column;gap:28px;
+  position:relative;z-index:2;
+}
+
+/* ── TYPE — misma jerarquía del dashboard ── */
+.eyebrow{
+  display:inline-flex;align-items:center;gap:12px;
+  font-size:11px;font-weight:500;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--txt4);
+}
+.eyebrow::before{content:"";width:16px;height:1px;background:var(--txt4);}
+h1{
+  font-size:clamp(44px,8vw,88px);font-weight:500;
+  line-height:1.02;letter-spacing:-1.8px;color:var(--txt1);
+}
+h2{
+  font-size:clamp(30px,5vw,60px);font-weight:500;
+  line-height:1.04;letter-spacing:-1.2px;color:var(--txt1);
+}
+h3{font-size:14px;font-weight:600;letter-spacing:-.1px;color:var(--txt1);}
+.lead{
+  font-size:16px;font-weight:400;line-height:1.65;
+  letter-spacing:-.13px;color:var(--txt3);max-width:680px;
+}
+.body{font-size:13px;font-weight:400;line-height:1.65;letter-spacing:-.13px;color:var(--txt3);}
+.dim{color:var(--txt4);}
+.divider{width:40px;height:1px;background:var(--border);}
+.a-line{color:var(--accent2);font-style:normal;}
+
+/* ── GRID ── */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+.g-mixed{display:grid;grid-template-columns:1.05fr .95fr;gap:18px;align-items:start;}
+
+/* ── CARDS ── */
+.card{
+  background:rgba(255,255,255,0.015);border:1px solid var(--border);
+  border-radius:10px;padding:20px;position:relative;overflow:hidden;
+  transition:background .25s,border-color .25s,transform .25s,box-shadow .25s;
+}
+.card:hover{
+  background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,.18);
+  transform:translateY(-1px);
+  box-shadow:0 20px 40px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.05);
+}
+.card .num{
+  font-size:9px;font-weight:600;letter-spacing:.28em;
+  text-transform:uppercase;color:var(--txt4);margin-bottom:12px;
+}
+.card h3{margin-bottom:8px;}
+.card p{font-size:13px;font-weight:400;line-height:1.65;letter-spacing:-.13px;color:var(--txt3);}
+
+/* ── PANEL ── */
+.panel{
+  background:rgba(255,255,255,0.015);border:1px solid var(--border);
+  border-radius:12px;padding:24px;
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+}
+.panel h3{margin-bottom:16px;}
+
+/* ── BLIST ── */
+.blist{list-style:none;display:flex;flex-direction:column;gap:7px;}
+.blist li{
+  padding:10px 12px;
+  background:rgba(255,255,255,0.02);border:1px solid var(--border-s);
+  border-radius:6px;font-size:13px;font-weight:400;
+  line-height:1.55;letter-spacing:-.1px;color:var(--txt3);
+}
+
+/* ── CHIPS ── */
+.chips{display:flex;flex-wrap:wrap;gap:7px;}
+.chip{
+  padding:5px 12px;border-radius:999px;
+  border:1px solid rgba(255,255,255,0.06);background:transparent;
+  font-size:12px;font-weight:500;letter-spacing:-.1px;color:var(--txt3);
+}
+
+/* ── STATS ── */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+.stat{
+  padding:20px;border:1px solid var(--border);
+  border-radius:10px;background:rgba(255,255,255,0.015);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+}
+.stat .big{
+  font-size:clamp(24px,3.5vw,44px);font-weight:500;
+  letter-spacing:-1px;line-height:1;color:var(--txt1);margin-bottom:7px;
+}
+.stat .lbl{font-size:11px;font-weight:400;line-height:1.5;color:var(--txt4);}
+
+/* ── KELSEN ── */
+.kelsen{display:flex;flex-direction:column;gap:9px;}
+.klvl{
+  padding:16px 20px;border:1px solid var(--border);
+  border-radius:8px;background:rgba(255,255,255,0.015);
+}
+.klvl .kl{
+  font-size:9px;font-weight:600;letter-spacing:.28em;
+  text-transform:uppercase;color:var(--txt4);margin-bottom:5px;
+}
+.klvl .kv{font-size:13px;font-weight:400;line-height:1.55;color:var(--txt2);}
+
+/* ── TIMELINE ── */
+.tl{display:flex;flex-direction:column;gap:9px;}
+.trow{display:grid;grid-template-columns:190px 1fr;gap:12px;align-items:center;}
+.tlbl{font-size:12px;font-weight:500;letter-spacing:-.1px;color:var(--txt2);}
+.ttrack{
+  position:relative;height:44px;
+  background:rgba(255,255,255,0.03);border:1px solid var(--border);
+  border-radius:8px;overflow:hidden;
+}
+.tfill{
+  position:absolute;top:7px;bottom:7px;left:7px;
+  border-radius:4px;background:var(--txt1);width:0%;
+  display:flex;align-items:center;padding:0 10px;
+  color:#000;font-size:11px;font-weight:600;
+  white-space:nowrap;overflow:hidden;
+}
+
+/* ── BG WORD ── */
+.bgw{
+  position:absolute;bottom:-.05em;right:-.04em;
+  font-size:clamp(90px,17vw,240px);font-weight:500;
+  letter-spacing:-.08em;color:rgba(255,255,255,0.018);
+  line-height:1;user-select:none;pointer-events:none;z-index:1;
+}
+
+/* ── CENTER ── */
+.center{display:flex;flex-direction:column;align-items:center;text-align:center;}
+.center .lead{margin:0 auto;}
+.center .chips{justify-content:center;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1000px){
+  .g4,.g3,.stats{grid-template-columns:1fr 1fr;}
+  .g-mixed,.g2{grid-template-columns:1fr;}
+}
+@media(max-width:600px){
+  .slide{padding:44px 20px;}
+  h1{font-size:38px;letter-spacing:-1px;}
+  h2{font-size:26px;letter-spacing:-.5px;}
+  .g4,.g3,.g2,.stats,.trow{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ INTRO ═══ -->
+<div id="intro">
+  <div class="intro-logo">
+    <img src="logos/Logotipo 3.png" alt="OmniVision">
+  </div>
+  <div id="click-prompt">
+    <span>Click para continuar</span>
+    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+      <polyline points="6 9 12 15 18 9"/>
+    </svg>
+  </div>
+</div>
+
+<!-- ═══ LOADER ═══ -->
+<div id="loader">
+  <div class="loader-track"><div class="loader-fill"></div></div>
+</div>
+
+<!-- ═══ DECK ═══ -->
+<div id="deck">
+
+  <!-- 0 · PORTADA UNC -->
+  <div class="slide" data-i="0" style="align-items:stretch;">
+    <!-- Logo institución — arriba centro -->
+    <div class="e" style="
+      position:absolute;top:48px;left:0;right:0;
+      display:flex;flex-direction:column;align-items:center;gap:10px;z-index:2;
+    ">
+      <img src="logos/Logotipo 3.png" alt="Logo UNC" style="height:56px;object-fit:contain;filter:drop-shadow(0 0 20px rgba(255,255,255,.1));">
+      <div style="font-size:9px;font-weight:500;letter-spacing:.38em;text-transform:uppercase;color:var(--txt4);">Universidad Nacional de las Ciencias</div>
+    </div>
+
+    <!-- Título centrado en el medio -->
+    <div style="
+      position:absolute;inset:0;display:flex;flex-direction:column;
+      align-items:center;justify-content:center;gap:20px;z-index:2;text-align:center;
+      padding:0 clamp(24px,8vw,160px);
+    ">
+      <h1 class="e" style="font-size:clamp(52px,9.5vw,108px);letter-spacing:-3px;line-height:1;">OMNIVISION.</h1>
+      <p class="e" style="
+        font-size:clamp(14px,1.6vw,20px);font-weight:400;line-height:1.6;
+        letter-spacing:-.1px;color:var(--txt3);max-width:720px;
+      ">Sistema de Monitoreo de Videovigilancia Inteligente en Tiempo Real<br>basado en Edge Computing y Visión Artificial</p>
+    </div>
+
+    <!-- Integrantes / Tutor — abajo izquierda y derecha -->
+    <div class="e" style="
+      position:absolute;bottom:52px;left:0;right:0;
+      display:flex;justify-content:space-between;align-items:flex-end;
+      padding:0 clamp(28px,6vw,96px);z-index:2;
+    ">
+      <div>
+        <div style="font-size:9px;font-weight:600;letter-spacing:.28em;text-transform:uppercase;color:var(--txt4);margin-bottom:6px;">Integrantes</div>
+        <div style="font-size:14px;font-weight:400;color:var(--txt2);line-height:1.6;">Albert Fonseca<br>Emanuel Jiménez</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-size:9px;font-weight:600;letter-spacing:.28em;text-transform:uppercase;color:var(--txt4);margin-bottom:6px;">Tutor</div>
+        <div style="font-size:14px;font-weight:400;color:var(--txt2);">Ing. Deyanira Jiménez</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1 · PROPÓSITO -->
+  <div class="slide" data-i="1">
+    <div class="bgw">WHY</div>
+    <div class="inner">
+      <div class="eyebrow e">Propósito</div>
+      <h2 class="e">Seguridad preventiva,<br>no vigilancia <span class="a-line">pasiva</span></h2>
+      <div class="g-mixed">
+        <p class="lead e">OmniVision nace ante la vulnerabilidad de comunidades y comercios donde los incidentes no se detectan a tiempo. La solución convierte video en inteligencia operativa capaz de identificar señales de riesgo antes de que escalen.</p>
+        <div class="panel e">
+          <ul class="blist">
+            <li class="e">Reduce incertidumbre mediante análisis automatizado del comportamiento humano.</li>
+            <li class="e">Procesa localmente — responde sin depender de la nube.</li>
+            <li class="e">Supervisión remota solo de eventos relevantes, no del video bruto.</li>
+            <li class="e">Alineado con soberanía tecnológica usando herramientas abiertas.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2 · OBJETIVOS -->
+  <div class="slide" data-i="2">
+    <div class="bgw">OBJ</div>
+    <div class="inner">
+      <div class="eyebrow e">Objetivos</div>
+      <h2 class="e">Del monitoreo al sistema<br><span class="a-line">de respuesta</span></h2>
+      <p class="lead e">Implementar videovigilancia inteligente en tiempo real con alertas automáticas para fortalecer la seguridad en entornos comerciales, institucionales y públicos.</p>
+      <div class="g3">
+        <div class="card e"><div class="num">01</div><h3>Motor visual</h3><p>Detectar objetos y personas con YOLOv8 e identificar patrones conductuales sospechosos en tiempo real.</p></div>
+        <div class="card e"><div class="num">02</div><h3>Arquitectura Edge</h3><p>Ejecutar inferencia en nodos locales con FastAPI y procesamiento paralelo para latencia mínima.</p></div>
+        <div class="card e"><div class="num">03</div><h3>Plataforma central</h3><p>Orquestar usuarios, reglas y alertas con NestJS en una capa de microservicios escalable.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 · STACK -->
+  <div class="slide" data-i="3">
+    <div class="bgw">STACK</div>
+    <div class="inner">
+      <div class="eyebrow e">Stack tecnológico</div>
+      <h2 class="e">Ecosistema optimizado<br>para <span class="a-line">IA en tiempo real</span></h2>
+      <div class="g4">
+        <div class="card e"><div class="num">IA</div><h3>YOLOv8</h3><p>Equilibrio entre velocidad y precisión para detectar múltiples objetos en milisegundos.</p></div>
+        <div class="card e"><div class="num">Tracking</div><h3>Yolo-movement</h3><p>Seguimiento de trayectorias y persistencia de identificadores únicos por sujeto.</p></div>
+        <div class="card e"><div class="num">Edge</div><h3>FastAPI + Python</h3><p>Motor de inferencia con procesamiento paralelo de flujos de video en hardware local.</p></div>
+        <div class="card e"><div class="num">Backend</div><h3>NestJS</h3><p>Orquestación de negocio, WebSockets, seguridad y distribución eficiente de alertas.</p></div>
+      </div>
+      <div class="chips e">
+        <div class="chip e">OpenCV</div><div class="chip e">GitLab</div>
+        <div class="chip e">Linux (producción)</div><div class="chip e">VS Code</div>
+        <div class="chip e">Cursor</div><div class="chip e">Antigravity IDE</div>
+        <div class="chip e">Figma</div><div class="chip e">Photoshop</div><div class="chip e">Illustrator</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4 · ARQUITECTURA -->
+  <div class="slide" data-i="4">
+    <div class="bgw">ARCH</div>
+    <div class="inner">
+      <div class="eyebrow e">Arquitectura híbrida</div>
+      <h2 class="e">Nodo local + centro de<br>control <span class="a-line">unificado</span></h2>
+      <div class="g2">
+        <div class="panel e">
+          <h3>Nodo de borde (Omni-Box)</h3>
+          <ul class="blist">
+            <li class="e">Captura video de cámaras IP o analógicas (RTSP).</li>
+            <li class="e">Preprocesa con OpenCV y ejecuta inferencia local.</li>
+            <li class="e">Evita subir video bruto — privacidad garantizada.</li>
+            <li class="e">Latencia casi nula gracias al procesamiento en sitio.</li>
+            <li class="e">Contenedores Docker para despliegue inmediato.</li>
+          </ul>
+        </div>
+        <div class="panel e">
+          <h3>Backend central (NestJS)</h3>
+          <ul class="blist">
+            <li class="e">Recibe alertas confirmadas vía canal seguro cifrado.</li>
+            <li class="e">Sincroniza usuarios, logs, notificaciones y reglas.</li>
+            <li class="e">Dashboard, streaming segmentado y panel de config.</li>
+            <li class="e">Escala de un comercio pequeño a múltiples ubicaciones.</li>
+            <li class="e">WebSockets para notificación en tiempo real.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5 · COMPORTAMIENTO -->
+  <div class="slide" data-i="5">
+    <div class="bgw">AI</div>
+    <div class="inner">
+      <div class="eyebrow e">Análisis conductual</div>
+      <h2 class="e">No solo detecta quién está,<br>sino <span class="a-line">qué está haciendo</span></h2>
+      <p class="lead e">El flujo combina detección, tracking y reglas lógicas para categorizar acciones sospechosas y disparar alertas automáticas con extracción de clip.</p>
+      <div class="g4">
+        <div class="card e"><div class="num">Paso 01</div><h3>Detección</h3><p>Clasificación de personas y objetos con puntaje de confianza por escena y frame.</p></div>
+        <div class="card e"><div class="num">Paso 02</div><h3>Trayectorias</h3><p>Identificadores únicos por sujeto: velocidad, persistencia y desplazamiento mapeado.</p></div>
+        <div class="card e"><div class="num">Paso 03</div><h3>Reglas lógicas</h3><p>Merodeo, movimientos erráticos e intrusión en áreas u horarios restringidos.</p></div>
+        <div class="card e"><div class="num">Paso 04</div><h3>Alerta</h3><p>Clip extraído automáticamente y enviado por streaming para verificación humana inmediata.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6 · MARCO LEGAL -->
+  <div class="slide" data-i="6">
+    <div class="bgw">LEX</div>
+    <div class="inner">
+      <div class="eyebrow e">Marco legal · Pirámide de Kelsen</div>
+      <h2 class="e">Factibilidad jurídica bajo<br>el ordenamiento <span class="a-line">venezolano</span></h2>
+      <div class="g-mixed">
+        <div class="kelsen">
+          <div class="klvl e"><div class="kl">Nivel fundamental</div><div class="kv">CRBV · Art. 20, 48, 60 — Protección de imagen, privacidad y comunicaciones</div></div>
+          <div class="klvl e"><div class="kl">Nivel legal</div><div class="kv">Ley de Infogobierno · Delitos Informáticos · Seguridad Nacional · Código Penal</div></div>
+          <div class="klvl e"><div class="kl">Nivel sub-legal</div><div class="kv">Decreto 3.390 · Normas FONDONORMA · Providencias SUSCERTE</div></div>
+        </div>
+        <div class="panel e">
+          <ul class="blist">
+            <li class="e">Código abierto (YOLOv8, OpenCV) alineado con el Decreto 3.390.</li>
+            <li class="e">Analiza comportamiento — sin reconocimiento facial biométrico.</li>
+            <li class="e">Video permanece en el dispositivo local salvo alerta confirmada.</li>
+            <li class="e">Aviso visible de monitoreo inteligente obligatorio en el área.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7 · ALCANCES -->
+  <div class="slide" data-i="7">
+    <div class="bgw">SCOPE</div>
+    <div class="inner">
+      <div class="eyebrow e">Alcances y limitaciones</div>
+      <h2 class="e">Qué entrega OmniVision<br>y qué queda <span class="a-line">fuera</span></h2>
+      <div class="g2">
+        <div class="panel e">
+          <h3>Alcances</h3>
+          <ul class="blist">
+            <li class="e">Omni-Box pre-instalada para procesamiento local.</li>
+            <li class="e">Integración con cámaras IP o analógicas existentes.</li>
+            <li class="e">Canal seguro hacia backend centralizado.</li>
+            <li class="e">Dashboard, streaming y configuración de escenarios.</li>
+            <li class="e">Servicio gestionado IaaS con soporte del hardware.</li>
+          </ul>
+        </div>
+        <div class="panel e">
+          <h3>Limitaciones</h3>
+          <ul class="blist">
+            <li class="e">Capacidad condicionada por RAM / CPU / GPU del dispositivo.</li>
+            <li class="e">Requiere cámaras RTSP compatibles y red local estable.</li>
+            <li class="e">Afectado por oscuridad extrema o deslumbramiento directo.</li>
+            <li class="e">No incluye UPS, obra civil ni respuesta física.</li>
+            <li class="e">Sin internet, las alertas remotas se interrumpen.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8 · METODOLOGÍA -->
+  <div class="slide" data-i="8">
+    <div class="bgw">PMBOK</div>
+    <div class="inner">
+      <div class="eyebrow e">Metodología</div>
+      <h2 class="e">PMBOK para gestión,<br><span class="a-line">Scrum</span> para iteración técnica</h2>
+      <p class="lead e">El proyecto combina la estructura formal del PMBOK en infraestructura y adquisiciones con iteración ágil en IA, backend e integración de sistemas.</p>
+      <div class="g4">
+        <div class="card e"><div class="num">Inicio</div><h3>Definición</h3><p>Acta de constitución, interesados y necesidades de seguridad específicas del cliente.</p></div>
+        <div class="card e"><div class="num">Plan</div><h3>Gestión</h3><p>Cronograma, EDT, gestión de riesgos y adquisiciones del sistema.</p></div>
+        <div class="card e"><div class="num">Ejecución</div><h3>Desarrollo</h3><p>FastAPI, NestJS, YOLOv8, tracking, dashboard y pruebas funcionales.</p></div>
+        <div class="card e"><div class="num">Cierre</div><h3>Calidad</h3><p>Latencia, precisión, reducción de falsos positivos, estabilidad 24/7.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9 · GANTT -->
+  <div class="slide" data-i="9">
+    <div class="bgw">GANTT</div>
+    <div class="inner">
+      <div class="eyebrow e">Cronograma · Diagrama de Gantt</div>
+      <h2 class="e">8 semanas del diagnóstico<br>a la <span class="a-line">entrega</span></h2>
+      <div class="tl">
+        <div class="trow e"><div class="tlbl">Semana 1</div><div class="ttrack"><div class="tfill" data-w="14%">Cimentación legal y diagnóstico</div></div></div>
+        <div class="trow e"><div class="tlbl">Semanas 1–2</div><div class="ttrack"><div class="tfill" data-w="26%">Infraestructura y Omni-Box</div></div></div>
+        <div class="trow e"><div class="tlbl">Semanas 2–3</div><div class="ttrack"><div class="tfill" data-w="38%">Optimización IA y tracking</div></div></div>
+        <div class="trow e"><div class="tlbl">Semanas 3–5</div><div class="ttrack"><div class="tfill" data-w="62%">Integración Edge · Backend · Dashboard</div></div></div>
+        <div class="trow e"><div class="tlbl">Semanas 6–8</div><div class="ttrack"><div class="tfill" data-w="92%">QA · Piloto · Despliegue · Defensa</div></div></div>
+      </div>
+      <p class="body dim e">MVP preexistente + IA generativa como multiplicador + arquitectura modular = ciclo compacto y viable.</p>
+    </div>
+  </div>
+
+  <!-- 10 · CIERRE -->
+  <div class="slide" data-i="10">
+    <div class="inner center">
+      <div class="eyebrow e" style="justify-content:center">Cierre</div>
+      <img class="slide-logo e" src="logos/Logotipo 3.png" alt="OmniVision">
+      <div class="divider e" style="margin:0 auto"></div>
+      <p class="lead e">Sistema escalable, legalmente sustentado y técnicamente viable para detectar riesgos, reducir tiempos de respuesta y proteger entornos compartidos con inteligencia artificial.</p>
+      <div class="chips e">
+        <div class="chip">Edge Computing</div><div class="chip">YOLOv8</div>
+        <div class="chip">FastAPI + NestJS</div><div class="chip">Alertas Tempranas</div>
+        <div class="chip">Streaming Inteligente</div><div class="chip">Soberanía Tecnológica</div>
+      </div>
+      <p class="body dim e">Albert Fonseca · Emanuel Jiménez · Ing. Deyanira Jiménez · 04/2026</p>
+    </div>
+  </div>
+
+</div><!-- /#deck -->
+
+<div id="dots"></div>
+<div id="hint">Scroll para navegar <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12l7 7 7-7"/></svg></div>
+<div id="counter"><b>01</b> / 11</div>
+
+<!-- ── CURSORES PERSONALIZADOS ── -->
+<div id="cursor-dot"  class="custom-cursor"></div>
+<div id="cursor-ring" class="custom-cursor"></div>
+
+<script>
+(function(){
+  /* ══════════════════════
+     CURSOR PERSONALIZADO
+  ══════════════════════ */
+  const dot  = document.getElementById('cursor-dot');
+  const ring = document.getElementById('cursor-ring');
+  let mx=-200,my=-200,rx=-200,ry=-200,clicking=false;
+
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+  document.addEventListener('mousedown',()=>{clicking=true;});
+  document.addEventListener('mouseup',  ()=>{clicking=false;});
+
+  (function loop(){
+    rx+=(mx-rx)*.15; ry+=(my-ry)*.15;
+    dot.style.left  =mx+'px'; dot.style.top=my+'px';
+    dot.style.transform=`translate(-50%,-50%) scale(${clicking?.8:1})`;
+    ring.style.left =rx+'px'; ring.style.top=ry+'px';
+    ring.style.transform=`translate(-50%,-50%) scale(${clicking?1.5:1})`;
+    requestAnimationFrame(loop);
+  })();
+
+  /* ══════════════════════
+     GSAP + SLIDES
+  ══════════════════════ */
+  gsap.registerPlugin(ScrollTrigger);
+  const TOTAL=11;
+  let cur=0,busy=false;
+
+  const slides    =Array.from(document.querySelectorAll('.slide'));
+  const introEl   =document.getElementById('intro');
+  const loaderEl  =document.getElementById('loader');
+  const deckEl    =document.getElementById('deck');
+  const dotsEl    =document.getElementById('dots');
+  const hintEl    =document.getElementById('hint');
+  const counterEl =document.getElementById('counter');
+  const loaderFill=document.querySelector('.loader-fill');
+  const clickPrompt=document.getElementById('click-prompt');
+  const introLogo  =document.querySelector('.intro-logo');
+
+  /* stack all slides below viewport except first */
+  slides.forEach((s,i)=>gsap.set(s,{y:i===0?'0%':'100%',zIndex:TOTAL-i}));
+
+  /* Pre-set ALL slide items invisible at start */
+  slides.forEach(s=>{
+    const items=Array.from(s.querySelectorAll('.e'));
+    gsap.set(items,{opacity:0,y:20,filter:'blur(4px)'});
+  });
+
+  /* build dots */
+  slides.forEach((_,i)=>{
+    const d=document.createElement('div');
+    d.className='dot'+(i===0?' active':'');
+    d.addEventListener('click',()=>goTo(i));
+    dotsEl.appendChild(d);
+  });
+
+  function updateHUD(i){
+    document.querySelectorAll('.dot').forEach((d,j)=>d.classList.toggle('active',j===i));
+    counterEl.innerHTML=`<b>${String(i+1).padStart(2,'0')}</b> / ${String(TOTAL).padStart(2,'0')}`;
+  }
+
+  /* ── STAGGER IN — fires AFTER the slide has fully landed ── */
+  function staggerIn(slide, dir){
+    const fromY = (dir >= 0) ? 20 : -20;
+    const items = Array.from(slide.querySelectorAll('.e'));
+    gsap.killTweensOf(items);
+    gsap.set(items,{opacity:0, y:fromY, filter:'blur(4px)'});
+    gsap.to(items,{
+      opacity:1, y:0, filter:'blur(0px)',
+      duration:.6, stagger:.07,
+      ease:'power3.out'
+    });
+    /* Gantt bars */
+    slide.querySelectorAll('.tfill').forEach((bar,idx)=>{
+      const tw=bar.dataset.w||'50%';
+      gsap.set(bar,{width:0});
+      gsap.to(bar,{width:tw,duration:1.0,ease:'power3.out',delay:.35+idx*.12});
+    });
+  }
+
+  /* ── STAGGER OUT — instant kill so slide can move ── */
+  function staggerOut(slide,dir){
+    const items=Array.from(slide.querySelectorAll('.e'));
+    gsap.killTweensOf(items);
+    gsap.to(items,{
+      opacity:0, y:dir>0?-14:14, filter:'blur(3px)',
+      duration:.28, stagger:.024, ease:'power2.in'
+    });
+  }
+
+  /* ── NAVIGATE ── */
+  function goTo(next){
+    if(busy||next===cur||next<0||next>=TOTAL)return;
+    busy=true;
+    const dir=next>cur?1:-1;
+    const entering=slides[next];
+    const leaving=slides[cur];
+
+    /* Pre-hide entering items so they don't flash while sliding in */
+    const enterItems=Array.from(entering.querySelectorAll('.e'));
+    gsap.set(enterItems,{opacity:0, y:dir>0?20:-20, filter:'blur(4px)'});
+
+    gsap.set(entering,{y:dir>0?'100%':'-100%',zIndex:TOTAL-next});
+    gsap.set(leaving,{zIndex:TOTAL-cur});
+    staggerOut(leaving,dir);
+
+    gsap.to(entering,{
+      y:'0%', duration:.82, ease:'expo.inOut',
+      onComplete:()=>{
+        /* Slide is now at y=0 — run the stagger visibly */
+        staggerIn(entering,dir);
+        gsap.set(leaving,{y:dir>0?'-100%':'100%'});
+        cur=next; busy=false; updateHUD(cur);
+      }
+    });
+  }
+
+  /* ── INPUT — wheel, touch, keyboard ── */
+  let wt;
+  window.addEventListener('wheel',e=>{
+    clearTimeout(wt);
+    wt=setTimeout(()=>{e.deltaY>0?goTo(cur+1):goTo(cur-1);},50);
+  },{passive:true});
+
+  let ty=0;
+  window.addEventListener('touchstart',e=>{ty=e.touches[0].clientY;},{passive:true});
+  window.addEventListener('touchend',e=>{
+    const d=ty-e.changedTouches[0].clientY;
+    if(Math.abs(d)>42)d>0?goTo(cur+1):goTo(cur-1);
+  },{passive:true});
+
+  window.addEventListener('keydown',e=>{
+    if(['ArrowDown','ArrowRight','PageDown'].includes(e.key)){e.preventDefault();goTo(cur+1);}
+    if(['ArrowUp','ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();goTo(cur-1);}
+  });
+
+  /* ── INTRO ANIMATION ── */
+  gsap.set(introLogo,{opacity:0,y:16});
+  gsap.set(clickPrompt,{opacity:0});
+  gsap.timeline({delay:.3})
+    .to(introLogo,{opacity:1,y:0,duration:1.1,ease:'expo.out'})
+    .to(clickPrompt,{opacity:1,duration:.7,ease:'power2.out'},'-=.3');
+
+  /* ── CLICK ANYWHERE → LOADER → DECK ── */
+  introEl.addEventListener('click',()=>{
+    gsap.to(introEl,{opacity:0,duration:.4,ease:'power2.in',
+      onComplete:()=>{introEl.style.display='none';startLoader();}
+    });
+  });
+
+  function startLoader(){
+    loaderEl.style.visibility='visible';
+    gsap.to(loaderEl,{opacity:1,duration:.25});
+    /* Barra animada de 0 a 100% — sin texto, sin isotipo */
+    gsap.to(loaderFill,{
+      width:'100%',
+      duration:1.4,
+      ease:'power2.inOut',
+      onComplete:()=>setTimeout(finishLoader,180)
+    });
+  }
+
+  function finishLoader(){
+    gsap.to(loaderEl,{opacity:0,duration:.55,ease:'power2.inOut',
+      onComplete:()=>{
+        loaderEl.style.visibility='hidden';
+        deckEl.style.visibility='visible';
+        gsap.to(deckEl,{opacity:1,duration:.45,ease:'power2.out'});
+        gsap.to([dotsEl,hintEl,counterEl],{opacity:1,duration:.6,delay:.3});
+        /* First slide: stagger in after deck appears */
+        setTimeout(()=>staggerIn(slides[0],1), 350);
+        updateHUD(0);
+        const hide=()=>gsap.to(hintEl,{opacity:0,duration:.4});
+        window.addEventListener('wheel',hide,{once:true});
+        window.addEventListener('keydown',hide,{once:true});
+        window.addEventListener('touchend',hide,{once:true});
+      }
+    });
+  }
+})();
+</script>
+</body>
+</html>

@@ -105,7 +105,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initFeaturesAnimations();
     initNavScroll();
     initOmniboxAnimations();
-    initSlider();
+    initStepSlider();
+    initSequenceAnimation();
 
     // Fundamental: Refresh ScrollTrigger una vez que el DOM es visible
     setTimeout(() => {
@@ -359,6 +360,7 @@ document.addEventListener('DOMContentLoaded', () => {
         toggleActions: 'play none none none'
       },
       y: 0,
+      yPercent: 0,
       duration: 1.05,
       ease: 'power4.out',
       stagger: 0.15
@@ -366,78 +368,203 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ═══════════════════════════════════════════════════════
-     ACCORDION SLIDER
+     STEP SLIDER
   ═══════════════════════════════════════════════════════ */
-  function initSlider() {
-    const cards = document.querySelectorAll('.slide-card');
-    const prevBtn = document.getElementById('slider-prev');
-    const nextBtn = document.getElementById('slider-next');
-    if (!cards.length) return;
+  function initStepSlider() {
+    const tabs = document.querySelectorAll('.step-tab');
+    const panels = document.querySelectorAll('.step-visual-panel');
+    const contents = document.querySelectorAll('.step-content');
+    if (!tabs.length) return;
 
-    let currentIndex = 0;
-    let sliderInterval;
-    let isPaused = false;
+    let currentStep = 0;
+    let intervalId = null;
+    const DURATION = 4000;
 
-    // Entrada animada del slider con ScrollTrigger (stagger)
-    gsap.from('#slider-section .slider-header, #slider-section .slide-card', {
+    function goToStep(index) {
+        tabs.forEach(t => {
+            t.classList.remove('active');
+            const fill = t.querySelector('.step-tab-fill');
+            if (fill) {
+                fill.style.animation = 'none';
+                fill.offsetHeight;
+                fill.style.animation = '';
+            }
+        });
+        panels.forEach(p => p.classList.remove('active'));
+        contents.forEach(c => c.classList.remove('active'));
+
+        tabs[index].classList.add('active');
+        panels[index].classList.add('active');
+        contents[index].classList.add('active');
+
+        const columns = document.querySelectorAll('.step-column');
+        columns.forEach((col, i) => {
+            col.classList.toggle('active', i === index);
+        });
+
+        tabs.forEach((t, i) => {
+            const label = t.querySelector('.step-tab-label');
+            const dataLabel = t.getAttribute('data-label');
+            if (label && dataLabel) {
+                label.textContent = dataLabel;
+            }
+        });
+
+        currentStep = index;
+    }
+
+    function nextStep() {
+        goToStep((currentStep + 1) % tabs.length);
+    }
+
+    function startAutoPlay() {
+        stopAutoPlay();
+        intervalId = setInterval(nextStep, DURATION);
+    }
+
+    function stopAutoPlay() {
+        if (intervalId) {
+            clearInterval(intervalId);
+            intervalId = null;
+        }
+    }
+
+    tabs.forEach((tab, i) => {
+        tab.addEventListener('click', () => {
+            goToStep(i);
+            startAutoPlay();
+        });
+    });
+
+    const tlSlider = gsap.timeline({
       scrollTrigger: {
-        trigger: '#slider-section',
+        trigger: '#slider-interactivo',
         start: 'top 80%',
         toggleActions: 'play none none none'
-      },
-      y: 50,
-      opacity: 0,
-      duration: 1,
-      ease: 'power3.out',
-      stagger: 0.15
-    });
-
-    function goToSlide(index) {
-      cards[currentIndex].classList.remove('active');
-      currentIndex = index;
-      if (currentIndex >= cards.length) currentIndex = 0;
-      if (currentIndex < 0) currentIndex = cards.length - 1;
-      cards[currentIndex].classList.add('active');
-    }
-
-    function nextSlide() {
-      if (!isPaused) {
-        goToSlide(currentIndex + 1);
       }
-    }
+    });
+    tlSlider.from('#slider-interactivo .outro-inner', { y: 40, opacity: 0, duration: 0.8, ease: 'power3.out' })
+            .from('#slider-interactivo .step-visual', { scale: 0.95, opacity: 0, duration: 0.8, ease: 'power3.out' }, "-=0.4")
+            .from('#slider-interactivo .step-tab', { y: 20, opacity: 0, stagger: 0.1, duration: 0.6, ease: 'power2.out' }, "-=0.4");
 
-    function resetInterval() {
-      clearInterval(sliderInterval);
-      sliderInterval = setInterval(nextSlide, 5000);
-    }
+    goToStep(0);
+    startAutoPlay();
+  }
 
-    cards.forEach((card, i) => {
-      // Click manually activates slide
-      card.addEventListener('click', () => {
-        if (currentIndex !== i) {
-          goToSlide(i);
-          resetInterval();
+  /* ═══════════════════════════════════════════════════════
+     SEQUENCE ANIMATION (200 to 1)
+  ═══════════════════════════════════════════════════════ */
+  function initSequenceAnimation() {
+    const canvas = document.getElementById("sequence-canvas");
+    const seqText = document.getElementById("sequence-text");
+    if (!canvas) return;
+    const context = canvas.getContext("2d");
+
+    const setcanvassize = () => {
+        const pixelRatio = window.devicePixelRatio || 1;
+        canvas.width = window.innerWidth * pixelRatio;
+        canvas.height = window.innerHeight * pixelRatio;
+        canvas.style.width = window.innerWidth + "px";
+        canvas.style.height = window.innerHeight + "px";
+        context.scale(pixelRatio, pixelRatio);
+    };
+
+    setcanvassize();
+    
+    const frameCount = 200;
+    const currentFrame = (index) => {
+        // Starts at frame 200, ends at frame 1 as index goes 0 to 199
+        const frameNum = 200 - index;
+        return `img/${frameNum.toString().padStart(3, "0")}.webp`;
+    };
+
+    let images = [];
+    let videoFrames = { frame: 0 };
+    let imageToLoad = frameCount;
+
+    const render = () => {
+        const canvasWidth  = window.innerWidth;
+        const canvasHeight = window.innerHeight;
+
+        context.clearRect(0, 0, canvasWidth, canvasHeight);
+
+        const img = images[videoFrames.frame];
+        if (img && img.complete && img.naturalWidth > 0) {
+            const imageAspect  = img.naturalWidth / img.naturalHeight;
+            const canvasAspect = canvasWidth / canvasHeight;
+            let drawWidth, drawHeight, drawX, drawY;
+
+            if (imageAspect > canvasAspect) {
+                drawHeight = canvasHeight;
+                drawWidth  = canvasHeight * imageAspect;
+                drawX      = (canvasWidth - drawWidth) / 2;
+                drawY      = 0;
+            } else {
+                drawWidth  = canvasWidth;
+                drawHeight = canvasWidth / imageAspect;
+                drawX      = 0;
+                drawY      = (canvasHeight - drawHeight) / 2;
+            }
+            context.drawImage(img, drawX, drawY, drawWidth, drawHeight);
         }
-      });
-      
-      // Pause auto-rotation on hover
-      card.addEventListener('mouseenter', () => isPaused = true);
-      card.addEventListener('mouseleave', () => isPaused = false);
+    };
+
+    const onLoad = () => {
+        imageToLoad--;
+        if (!imageToLoad) {
+            render();
+        }
+    };
+
+    for (let i = 0; i < frameCount; i++) {
+        const img = new Image();
+        img.onload = onLoad;
+        img.onerror = function () {
+            onLoad.call(this);
+        };
+        img.src = currentFrame(i);
+        images.push(img);
+    }
+
+    ScrollTrigger.create({
+        trigger: ".hero-sequence",
+        start: "top top",
+        end: `+=${window.innerHeight * 10}px`, // 10 viewports duration to slow it down
+        pin: true,
+        pinSpacing: true,
+        scrub: 0.5,
+        onUpdate: (self) => {
+            const p = self.progress;
+            const targetFrame = Math.min(Math.round(p * (frameCount - 1)), frameCount - 1);
+            videoFrames.frame = targetFrame;
+            render();
+            
+            // Fade in text word by word
+            const words = document.querySelectorAll('.seq-word');
+            if (words.length && p > 0.8) {
+                const textP = (p - 0.8) / 0.2;
+                words.forEach((word, index) => {
+                    const threshold = index * (1 / words.length);
+                    const wordP = (textP - threshold) * words.length; 
+                    word.style.opacity = Math.max(0, Math.min(1, wordP));
+                    const translateY = Math.max(0, 10 - wordP * 10);
+                    word.style.transform = `translateY(${translateY}px)`;
+                });
+                if (seqText) seqText.style.opacity = 1;
+            } else if (words.length) {
+                words.forEach(word => {
+                    word.style.opacity = 0;
+                    word.style.transform = 'translateY(10px)';
+                });
+                if (seqText) seqText.style.opacity = 0;
+            }
+        }
     });
 
-    if (prevBtn && nextBtn) {
-      prevBtn.addEventListener('click', () => {
-        goToSlide(currentIndex - 1);
-        resetInterval();
-      });
-      nextBtn.addEventListener('click', () => {
-        goToSlide(currentIndex + 1);
-        resetInterval();
-      });
-    }
-
-    // Start auto-rotation
-    resetInterval();
+    window.addEventListener("resize", () => {
+        setcanvassize();
+        render();
+    });
   }
 
 });
