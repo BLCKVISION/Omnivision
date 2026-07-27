@@ -637,16 +637,29 @@ a {
 
 /* ── Feature Card ── */
 .feat-card {
-  background: linear-gradient(180deg, #131315 0%, #030303 100%);
-  border: 1px solid rgba(255,255,255,0.04);
+  position: relative;
   border-radius: 14px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: border-color 0.4s ease, background 0.4s ease;
+  isolation: isolate; /* Creates z-index context so ::before doesn't go under page */
+  --bg-opacity: 0;
 }
 
-.feat-card:hover {
+.feat-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, #131315 0%, #030303 100%);
+  border: 1px solid rgba(255,255,255,0.04);
+  border-radius: inherit;
+  z-index: -1;
+  opacity: var(--bg-opacity); /* Controlled by GSAP */
+  transition: border-color 0.4s ease, background 0.4s ease;
+  will-change: opacity;
+}
+
+.feat-card:hover::before {
   border-color: rgba(255,255,255,0.14);
   background: rgba(255,255,255,0.05);
 }

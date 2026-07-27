@@ -346,7 +346,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
       tl.to(img, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' })
         .to(title, { opacity: 1, duration: 0.7, ease: 'power2.out' }, "-=0.4")
-        .to(text, { opacity: 1, duration: 0.7, ease: 'power2.out' }, "-=0.45");
+        .to(text, { opacity: 1, duration: 0.7, ease: 'power2.out' }, "-=0.45")
+        // Animate the CSS variable to fade in the card body last
+        .to(card, { '--bg-opacity': 1, duration: 0.8, ease: 'power2.out' }, "-=0.2");
     });
   }
   /* ═══════════════════════════════════════════════════════
