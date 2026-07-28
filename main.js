@@ -59,8 +59,9 @@ document.addEventListener('DOMContentLoaded', () => {
   /* Step 2a — Isotipo se desliza a la izquierda dentro del flex row.
      Animamos el loaderLogo completo hacia la izquierda para que
      visualmente el isotipo se desplace dejando espacio al logotipo. */
+  const isMobileLoader = window.innerWidth <= 768;
   tl.to(loaderLogo, {
-    xPercent: -65,    /* shift group left so logotipo has room */
+    xPercent: isMobileLoader ? -50 : -65,    /* en móvil lo dejamos en -50 para que quede perfectamente centrado */
     duration: 0.9,
     ease: 'power2.inOut'
   }, '+=0.5');
@@ -145,6 +146,17 @@ document.addEventListener('DOMContentLoaded', () => {
       stagger: 0.04,
       delay: 0.52
     });
+
+    /* Mobile hero button (if exists) */
+    const mobileHeroBtn = document.querySelector('.mobile-hero-btn');
+    if (mobileHeroBtn) {
+      gsap.to(mobileHeroBtn, {
+        opacity: 1, y: 0, scale: 1,
+        duration: 0.8,
+        ease: 'power3.out',
+        delay: 0.85
+      });
+    }
 
     /* Dashboard fade-up */
     gsap.to(dashboard, {
@@ -569,4 +581,61 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  /* ═══════════════════════════════════════════════════════
+     MOBILE MENU TOGGLE
+  ═══════════════════════════════════════════════════════ */
+  const mobileToggle = document.querySelector('.mobile-menu-toggle');
+  const mobileOverlay = document.getElementById('mobile-menu-overlay');
+  const mobileLinks = document.querySelectorAll('.mobile-nav-link');
+  const mobileMenuFooter = document.querySelector('.mobile-menu-footer');
+  let menuOpen = false;
+
+  if (mobileToggle && mobileOverlay) {
+    mobileToggle.addEventListener('click', () => {
+      menuOpen = !menuOpen;
+      mobileToggle.classList.toggle('active');
+      document.body.classList.toggle('menu-open', menuOpen);
+      
+      if (menuOpen) {
+        gsap.to(mobileOverlay, { opacity: 1, pointerEvents: 'auto', duration: 0.4, ease: 'power2.out' });
+        gsap.to(mobileLinks, { y: 0, opacity: 1, duration: 0.5, stagger: 0.1, ease: 'power3.out', delay: 0.2 });
+        if(mobileMenuFooter) gsap.to(mobileMenuFooter, { y: 0, opacity: 1, duration: 0.5, ease: 'power3.out', delay: 0.5 });
+      } else {
+        gsap.to(mobileLinks, { y: 20, opacity: 0, duration: 0.3, ease: 'power2.in' });
+        if(mobileMenuFooter) gsap.to(mobileMenuFooter, { y: 20, opacity: 0, duration: 0.3, ease: 'power2.in' });
+        gsap.to(mobileOverlay, { opacity: 0, pointerEvents: 'none', duration: 0.4, ease: 'power2.in', delay: 0.2 });
+      }
+    });
+
+    mobileLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        menuOpen = false;
+        mobileToggle.classList.remove('active');
+        document.body.classList.remove('menu-open');
+        gsap.to(mobileLinks, { y: 20, opacity: 0, duration: 0.3, ease: 'power2.in' });
+        if(mobileMenuFooter) gsap.to(mobileMenuFooter, { y: 20, opacity: 0, duration: 0.3, ease: 'power2.in' });
+        gsap.to(mobileOverlay, { opacity: 0, pointerEvents: 'none', duration: 0.4, ease: 'power2.in', delay: 0.2 });
+      });
+    });
+  }
+
+  /* ═══════════════════════════════════════════════════════
+     USER DROPDOWN TOGGLE
+  ═══════════════════════════════════════════════════════ */
+  const userToggle = document.querySelector('.mobile-login');
+  const userDropdown = document.querySelector('.user-dropdown');
+  
+  if (userToggle && userDropdown) {
+    userToggle.addEventListener('click', (e) => {
+      if (e.target.tagName !== 'A') {
+        userDropdown.classList.toggle('active');
+      }
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!userToggle.contains(e.target)) {
+        userDropdown.classList.remove('active');
+      }
+    });
+  }
 });

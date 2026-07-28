@@ -58,7 +58,37 @@
         <a href="#login" class="nav-link" id="nav-login">Iniciar Sesión</a>
         <a href="#contacto" class="nav-btn" id="nav-contacto">Contacto</a>
       </div>
+      
+      <!-- Mobile Hamburger (Left) -->
+      <button class="mobile-menu-toggle" aria-label="Abrir menú">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <!-- Mobile Login Icon (Right) -->
+      <div class="mobile-login" aria-label="Menu de Usuario">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        <div class="user-dropdown">
+          <a href="#login">Iniciar Sesión</a>
+          <a href="#registro">Registrarse</a>
+          <a href="#dashboard">Mi Panel</a>
+        </div>
+      </div>
     </nav>
+
+    <!-- ── MOBILE FULLSCREEN MENU ── -->
+    <div id="mobile-menu-overlay">
+      <div class="mobile-menu-content">
+        <a href="#caracteristicas" class="mobile-nav-link">Características</a>
+        <a href="#nosotros" class="mobile-nav-link">Vision-Box</a>
+        <a href="#login" class="mobile-nav-link">Iniciar Sesión</a>
+        <a href="#contacto" class="mobile-nav-link">Contacto</a>
+      </div>
+      <div class="mobile-menu-footer">
+        <img src="logos/Isotipo.webp" alt="OmniVision" />
+      </div>
+    </div>
 
     <!-- ── HERO ─────────────────────────────────── -->
     <section id="hero">
@@ -83,6 +113,12 @@
           <span class="word-mask"><span class="word-inner">por</span></span>
           <span class="word-mask"><span class="word-inner">IA</span></span>
         </p>
+        <a href="#caracteristicas" class="mobile-hero-btn">
+          <span>Explorar Plataforma</span>
+          <div class="icon-circle">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </div>
+        </a>
       </div>
       <div id="dashboard-wrapper">
         <div id="dashboard-glow"></div>
