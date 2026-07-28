@@ -476,10 +476,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const setcanvassize = () => {
         const pixelRatio = window.devicePixelRatio || 1;
+        const isMobile = window.innerWidth <= 768;
+        const targetHeight = isMobile ? window.innerHeight * 0.6 : window.innerHeight;
+
         canvas.width = window.innerWidth * pixelRatio;
-        canvas.height = window.innerHeight * pixelRatio;
+        canvas.height = targetHeight * pixelRatio;
         canvas.style.width = window.innerWidth + "px";
-        canvas.style.height = window.innerHeight + "px";
+        canvas.style.height = targetHeight + "px";
         context.scale(pixelRatio, pixelRatio);
     };
 
@@ -497,8 +500,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let imageToLoad = frameCount;
 
     const render = () => {
+        const isMobile = window.innerWidth <= 768;
         const canvasWidth  = window.innerWidth;
-        const canvasHeight = window.innerHeight;
+        const canvasHeight = isMobile ? window.innerHeight * 0.6 : window.innerHeight;
 
         context.clearRect(0, 0, canvasWidth, canvasHeight);
 
