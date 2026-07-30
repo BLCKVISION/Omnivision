@@ -13,6 +13,7 @@
 document.addEventListener('DOMContentLoaded', () => {
 
   gsap.registerPlugin(ScrollTrigger);
+  ScrollTrigger.normalizeScroll(true);
 
   /* ── Prevent scroll during load ────────────────────────── */
   document.body.style.overflow = 'hidden';

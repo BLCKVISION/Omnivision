@@ -280,7 +280,10 @@
     <!-- ── OMNIBOX SECTION ─────────────── -->
     <section id="omnibox">
       <div class="omnibox-bg">
-        <img src="img/omnibox.webp" alt="Vision Box Edge" />
+        <picture>
+          <source media="(max-width: 768px)" srcset="img/omniboxphone.webp">
+          <img src="img/omnibox.webp" alt="Vision Box Edge" />
+        </picture>
       </div>
       <div class="omnibox-content">
         <h2 class="omnibox-title">
@@ -298,13 +301,22 @@
                 <!-- Visual area with images -->
                 <div class="step-visual">
                     <div class="step-visual-panel active" data-step="0">
-                        <img src="img/Discrimina.webp" alt="Discrimina">
+                        <picture>
+                            <source media="(max-width: 768px)" srcset="img/discriminaphone.webp">
+                            <img src="img/Discrimina.webp" alt="Discrimina">
+                        </picture>
                     </div>
                     <div class="step-visual-panel" data-step="1">
-                        <img src="img/trackea.webp" alt="Trackea">
+                        <picture>
+                            <source media="(max-width: 768px)" srcset="img/trackeaphone.webp">
+                            <img src="img/trackea.webp" alt="Trackea">
+                        </picture>
                     </div>
                     <div class="step-visual-panel" data-step="2">
-                        <img src="img/alerta.webp" alt="Alerta">
+                        <picture>
+                            <source media="(max-width: 768px)" srcset="img/alertaphone.webp">
+                            <img src="img/alerta.webp" alt="Alerta">
+                        </picture>
                     </div>
                 </div>
 

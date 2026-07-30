@@ -1288,6 +1288,9 @@ a {
    MOBILE RESPONSIVE
 ═══════════════════════════════════════════════════════════ */
 @media (max-width: 768px) {
+  body {
+    overscroll-behavior-y: none;
+  }
 
   /* NAVBAR */
   #navbar {
@@ -1619,29 +1622,74 @@ a {
   }
 
   /* SLIDER INTERACTIVO */
+  #slider-interactivo {
+    height: 100vh !important;
+    padding: 0 !important;
+  }
+
   .outro-inner {
-    padding: 0 35px !important;
+    padding: 0 !important;
+    height: 100%;
   }
 
-  .step-slider-container {
-    grid-template-columns: 1fr;
-    padding: 24px 15px;
-    gap: 30px;
+  .step-slider {
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
   }
 
-  .step-visual-container {
-    order: -1;
-    /* Make image appear on top */
-    min-height: 250px;
+  .step-visual {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
+
+  .step-visual-panel img {
+    width: 100%;
+    height: 100vh;
+    object-fit: cover;
+  }
+
+  /* Degradado Superior de 20vh e Inferior para el texto */
+  .step-slider::before, .step-slider::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 100%;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .step-slider::before {
+    top: 0;
+    height: 20vh; 
+    background: linear-gradient(to bottom, #000 0%, transparent 100%);
+  }
+  .step-slider::after {
+    bottom: 0;
+    height: 60vh; /* Sube un poco más para cubrir el texto */
+    background: linear-gradient(to top, #000 0%, rgba(0,0,0,0.9) 20%, transparent 100%);
   }
 
   .step-columns-container {
-    padding: 0;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 3;
+    padding: 0 30px 30px !important; /* Menos padding abajo para que baje más */
+    height: auto; /* Se ajusta a su contenido en la parte inferior */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; /* Texto alineado abajo */
   }
 
   .step-column:not(.active) {
     display: none;
-    /* Hide inactive tabs/content completely */
   }
 
   .step-column {
